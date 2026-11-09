@@ -76,19 +76,7 @@ func _begin() -> void:
 
 
 func _build_chrome(def: SceneDef) -> void:
-	var background: TextureRect = TextureRect.new()
-	background.texture = Assets.texture(def.background)
-	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	background.set_anchors_preset(Control.PRESET_FULL_RECT)
-	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background.add_to_group("background")
-	add_child(background)
-	stage.size = STAGE_SIZE
-	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(stage)
-	resized.connect(_center_stage)
-	_center_stage()
+	_build_background(def)
 	_quiqui.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_quiqui.size = Vector2(380, 380)
 	_quiqui.position = Vector2(1480, 500)
@@ -102,6 +90,22 @@ func _build_chrome(def: SceneDef) -> void:
 	_sink.play_music(def.music)
 	hint.hint_shown.connect(func() -> void: _set_hint(true))
 	hint.hint_hidden.connect(func() -> void: _set_hint(false))
+
+
+func _build_background(def: SceneDef) -> void:
+	var background: TextureRect = TextureRect.new()
+	background.texture = Assets.texture(def.background)
+	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	background.set_anchors_preset(Control.PRESET_FULL_RECT)
+	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.add_to_group("background")
+	add_child(background)
+	stage.size = STAGE_SIZE
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(stage)
+	resized.connect(_center_stage)
+	_center_stage()
 
 
 func _is_map(def: SceneDef) -> bool:
