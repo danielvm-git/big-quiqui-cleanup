@@ -1,5 +1,5 @@
 active_epic: e02
-active_story: e02s05
+active_story: e02s06
 branch: feat/e02-the-house
 decisions:
   - gate: "EPIC mapping"
