@@ -12,6 +12,18 @@ copy() {
 }
 
 copy art/backgrounds/bg_sala.jpg art/backgrounds/living_room.jpg
+copy art/backgrounds/bg_cozinha.jpg art/backgrounds/kitchen.jpg
+copy art/backgrounds/bg_banheiro.jpg art/backgrounds/bathroom.jpg
+copy art/backgrounds/bg_quarto.jpg art/backgrounds/bedroom.jpg
+copy art/backgrounds/bg_jardim.jpg art/backgrounds/garden.jpg
+copy art/backgrounds/bg_casinha.jpg art/backgrounds/house.jpg
+copy art/items/tigela.png art/items/bowl.png
+copy art/items/cupcake.png art/items/cupcake.png
+copy art/items/suco.png art/items/juice.png
+copy art/items/chapeu_amarelo.png art/items/hat.png
+copy art/items/cachecol_azul.png art/items/scarf.png
+copy art/items/laco_roxo.png art/items/bow.png
+copy art/efeitos/farelos.png art/effects/crumbs.png
 copy art/items/esponja.png art/items/sponge.png
 copy art/items/bola.png art/items/ball.png
 copy art/items/pelucia.png art/items/plush.png
@@ -27,6 +39,8 @@ copy art/quiqui/quiqui_acenando.png art/quiqui/wave.png
 copy art/quiqui/quiqui_brilhando.png art/quiqui/sparkle.png
 copy art/ui/botao_casa.png art/ui/home_button.png
 copy art/ui/botao_play.png art/ui/play_button.png
+copy art/ui/bolinha_progresso.png art/ui/dot_full.png
+copy art/ui/bolinha_progresso_vazia.png art/ui/dot_empty.png
 copy audio/sfx/tap.ogg audio/sfx/tap.ogg
 copy audio/sfx/success.ogg audio/sfx/success.ogg
 copy audio/sfx/drop.ogg audio/sfx/drop.ogg

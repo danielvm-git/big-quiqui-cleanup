@@ -29,6 +29,10 @@ func setup(params: Dictionary) -> void:
 	_reset_grid()
 
 
+func level_count() -> int:
+	return maxi(_levels, 1)
+
+
 func coverage() -> float:
 	return float(_cleared_count) / float(_cols * _rows)
 

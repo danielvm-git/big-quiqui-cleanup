@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_ec61y"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_6487e"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_xodnj"]
+
+[sub_resource type="Resource" id="Resource_4bu3h"]
+script = ExtResource("3_xodnj")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_0jnj6"]
+script = ExtResource("3_xodnj")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_ub8p2"]
+script = ExtResource("2_6487e")
+template = "t23_erase"
+params = {
+"cell": 20.0,
+"layer_rect": Rect2(180, 540, 760, 460),
+"levels": 2,
+"radius": 60.0,
+"threshold": 0.9,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_xodnj")]([SubResource("Resource_4bu3h"), SubResource("Resource_0jnj6")])
+
+[sub_resource type="Resource" id="Resource_8bkak"]
+script = ExtResource("3_xodnj")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_04dft"]
+script = ExtResource("3_xodnj")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_50ksh"]
+script = ExtResource("2_6487e")
+template = "t23_erase"
+params = {
+"cell": 20.0,
+"layer_rect": Rect2(1520, 80, 360, 340),
+"levels": 1,
+"radius": 60.0,
+"threshold": 0.9,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_xodnj")]([SubResource("Resource_8bkak"), SubResource("Resource_04dft")])
+
+[resource]
+script = ExtResource("1_ec61y")
+id = "bathroom"
+background = "backgrounds/bathroom"
+music = "music/main_theme"
+steps = Array[ExtResource("2_6487e")]([SubResource("Resource_ub8p2"), SubResource("Resource_50ksh")])
+next = "house_map"

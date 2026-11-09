@@ -26,7 +26,7 @@ context. Release builds print nothing. Never log a name, a path or typed text.
 
 | What | Command |
 |---|---|
-| Health: boots and the living room loads | `bash scripts/health.sh` |
+| Health: boots and the house map loads | `bash scripts/health.sh` |
 | View the log lines | `godot --path game 2>&1 \| grep '"message"'` |
 | All gates | `bash scripts/preflight.sh` |
 | Setup again (safe to repeat) | `bash scripts/setup.sh` |

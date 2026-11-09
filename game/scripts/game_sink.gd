@@ -7,6 +7,8 @@ const THROTTLE_MS: int = 140
 
 var quiqui: TextureRect = null
 var host: Control = null
+## Where sounds live. It must outlive the scene, or a tap that changes scene is cut off.
+var audio_host: Node = null
 var coins: int = 0
 
 var _last_ms: Dictionary = {}
@@ -44,6 +46,8 @@ func play_fx(value: String) -> void:
 
 
 func play_music(key: String) -> void:
+	if key.is_empty():
+		return
 	var stream: AudioStream = Assets.sound(key)
 	if host == null or stream == null:
 		return
@@ -69,10 +73,11 @@ func _throttled(key: String) -> bool:
 
 
 func _play(stream: AudioStream) -> void:
-	if host == null or stream == null:
+	var parent: Node = audio_host if audio_host != null else host
+	if parent == null or stream == null:
 		return
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.stream = stream
-	host.add_child(player)
+	parent.add_child(player)
 	player.finished.connect(player.queue_free)
 	player.play()

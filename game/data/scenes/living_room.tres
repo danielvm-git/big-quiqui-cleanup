@@ -59,7 +59,7 @@ params = {
 "homes": {
 "ball": Vector2(980, 860),
 "plush": Vector2(1180, 940),
-"toy_duck": Vector2(800, 960)
+"toy_duck": Vector2(800, 940)
 },
 "items": ["ball", "plush", "toy_duck"],
 "target_rect": Rect2(430, 300, 320, 500)
@@ -73,3 +73,4 @@ id = "living_room"
 background = "backgrounds/living_room"
 music = "music/main_theme"
 steps = Array[ExtResource("2_lbvbf")]([SubResource("Resource_iugtw"), SubResource("Resource_3wrwf")])
+next = "house_map"

@@ -74,7 +74,7 @@ func test_a_release_on_target_delivers_and_frees_the_touch() -> void:
 	var view: ToyView = _toys()
 	var toy: TextureRect = view.get_child(0) as TextureRect
 	toy.gui_input.emit(_touch(true, Vector2(10, 10)))
-	var on_target: Vector2 = TARGET.get_center() - toy.global_position
+	var on_target: Vector2 = TARGET.get_center() - toy.position
 	toy.gui_input.emit(_touch(false, on_target))
 	assert_eq(view.template.remaining().size(), 0)
 	assert_eq(toy.mouse_filter, Control.MOUSE_FILTER_IGNORE)

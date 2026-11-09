@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_malch"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_xyjf8"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_a472a"]
+
+[sub_resource type="Resource" id="Resource_xomxt"]
+script = ExtResource("3_a472a")
+kind = "sfx"
+value = "select"
+
+[sub_resource type="Resource" id="Resource_6lho6"]
+script = ExtResource("3_a472a")
+kind = "pose"
+value = "jump"
+
+[sub_resource type="Resource" id="Resource_vrsln"]
+script = ExtResource("3_a472a")
+kind = "fx"
+value = "sparkle"
+
+[sub_resource type="Resource" id="Resource_1ymuh"]
+script = ExtResource("2_xyjf8")
+template = "t21_touch_each"
+params = {
+"art": {
+"pile_1": "effects/crumbs",
+"pile_2": "effects/crumbs",
+"pile_3": "effects/crumbs",
+"pile_4": "effects/crumbs"
+},
+"positions": {
+"pile_1": Vector2(500, 820),
+"pile_2": Vector2(900, 940),
+"pile_3": Vector2(1350, 840),
+"pile_4": Vector2(1650, 940)
+},
+"targets": ["pile_1", "pile_2", "pile_3", "pile_4"]
+}
+on_hit = Array[ExtResource("3_a472a")]([SubResource("Resource_xomxt"), SubResource("Resource_6lho6"), SubResource("Resource_vrsln")])
+
+[resource]
+script = ExtResource("1_malch")
+id = "garden"
+background = "backgrounds/garden"
+music = "music/main_theme"
+steps = Array[ExtResource("2_xyjf8")]([SubResource("Resource_1ymuh")])
+next = "house_map"

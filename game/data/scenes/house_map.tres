@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_h5bh7"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_pjibn"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_8pcu2"]
+
+[sub_resource type="Resource" id="Resource_tdccr"]
+script = ExtResource("3_8pcu2")
+kind = "sfx"
+value = "tap"
+
+[sub_resource type="Resource" id="Resource_g4wth"]
+script = ExtResource("2_pjibn")
+template = "t25_map"
+params = {
+"rooms": [{
+"art": "backgrounds/living_room",
+"id": "living_room",
+"rect": Rect2(190, 200, 460, 320)
+}, {
+"art": "backgrounds/kitchen",
+"id": "kitchen",
+"rect": Rect2(730, 200, 460, 320)
+}, {
+"art": "backgrounds/bathroom",
+"id": "bathroom",
+"rect": Rect2(1270, 200, 460, 320)
+}, {
+"art": "backgrounds/bedroom",
+"id": "bedroom",
+"rect": Rect2(460, 600, 460, 320)
+}, {
+"art": "backgrounds/garden",
+"id": "garden",
+"rect": Rect2(1000, 600, 460, 320)
+}]
+}
+on_hit = Array[ExtResource("3_8pcu2")]([SubResource("Resource_tdccr")])
+
+[resource]
+script = ExtResource("1_h5bh7")
+id = "house_map"
+background = "backgrounds/house"
+music = "music/main_theme"
+steps = Array[ExtResource("2_pjibn")]([SubResource("Resource_g4wth")])

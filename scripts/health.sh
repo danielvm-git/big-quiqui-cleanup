@@ -19,8 +19,8 @@ if [ "$code" -ne 0 ] || grep -vE "still in use at exit" "$OUT" | grep -qE "SCRIP
 	exit 1
 fi
 if ! grep -q '"message":"scene_loaded"' "$OUT"; then
-	echo "UNHEALTHY: the living room did not report scene_loaded"
+	echo "UNHEALTHY: the house map did not report scene_loaded"
 	exit 1
 fi
-echo "HEALTHY: boots, living room loaded"
+echo "HEALTHY: boots, house map loaded"
 grep '"message"' "$OUT" | head -3
