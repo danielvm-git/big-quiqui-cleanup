@@ -57,13 +57,20 @@ func _draw() -> void:
 		for col: int in grid.x:
 			if not template.is_cell_cleared(col, row):
 				var center: Vector2 = _rect.position + (Vector2(col, row) + Vector2(0.5, 0.5)) * _cell
-				draw_circle(center, _cell * _blob(col, row), _dust(col, row))
+				draw_circle(center, _cell * _blob(col, row), dust_color(col, row))
 
 
 func _blob(col: int, row: int) -> float:
 	return 0.7 + 0.35 * float((col * 31 + row * 17) % 7) / 7.0
 
 
-func _dust(col: int, row: int) -> Color:
+## The first dirt level is heavy, the next ones lighter.
+func dust_strength() -> float:
+	var total: int = template.level_count()
+	return float(total - template.level) / float(total)
+
+
+func dust_color(col: int, row: int) -> Color:
 	var shade: float = float((col * 11 + row * 23) % 9) / 9.0
-	return Color(0.5 - 0.12 * shade, 0.4 - 0.1 * shade, 0.3 - 0.05 * shade, 0.32 + 0.2 * shade)
+	var alpha: float = (0.32 + 0.2 * shade) * dust_strength()
+	return Color(0.5 - 0.12 * shade, 0.4 - 0.1 * shade, 0.3 - 0.05 * shade, alpha)
