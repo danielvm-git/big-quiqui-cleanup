@@ -70,11 +70,13 @@ func _check_step(step: StepDef, id: String) -> void:
 			assert_true(STAGE.encloses(params["target_rect"] as Rect2), id)
 			for item: Variant in params["items"] as Array:
 				assert_not_null(Assets.texture("items/" + str(item)), id + ":" + str(item))
-				assert_true(STAGE.has_point((params["homes"] as Dictionary)[item] as Vector2), id)
+				var home: Vector2 = (params["homes"] as Dictionary)[item] as Vector2
+				assert_true(STAGE.encloses(_box(home, ToyView.TOY_SIZE)), id)
 		"t21_touch_each":
 			for target: Variant in params["targets"] as Array:
 				assert_not_null(Assets.texture(str((params["art"] as Dictionary)[target])), id)
-				assert_true(STAGE.has_point((params["positions"] as Dictionary)[target] as Vector2), id)
+				var spot: Vector2 = (params["positions"] as Dictionary)[target] as Vector2
+				assert_true(STAGE.encloses(_box(spot, TouchView.TARGET_SIZE)), id)
 
 
 func test_the_rooms_vary_the_gesture() -> void:
@@ -83,3 +85,8 @@ func test_the_rooms_vary_the_gesture() -> void:
 		for step: StepDef in _scene(id).steps:
 			templates[step.template] = true
 	assert_true(templates.has("t23_erase") and templates.has("t20_drag_snap") and templates.has("t21_touch_each"))
+
+
+## The box a target occupies at its biggest (the pop and hint pulses reach 1.5x).
+func _box(center: Vector2, size: Vector2) -> Rect2:
+	return Rect2(center - size * 0.75, size * 1.5)

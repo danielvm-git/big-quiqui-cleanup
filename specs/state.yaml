@@ -12,3 +12,7 @@ decisions:
     decision: "Fixed review findings 1-5, 9, 10. Deferred 6 (single booleans are not flag clusters) and 8 (wait reaction needs an async sink)"
   - gate: "e02 scope"
     decision: "Added e02s01 Stage and geometry: S1 used raw viewport coordinates, which drift on 4:3. Home and outro lead to the map; play again is tapping the room again"
+  - gate: "e02 request-review / respond-review"
+    decision: "Fixed review findings 1-6, 8-10 with tests (sound on the tree root, beat race via owned tween and run counter, hint pulse scale reset, outro centered, music owned by Boot, echo tests that can fail, failed signal and unsupported-template guard) and tightened data checks to whole boxes at 1.5x. Deferred: 7 (oracle does not audit pulse scales or the dirt layer as hit targets beyond the data check)"
+  - gate: "e02 audit-code"
+    decision: "Size bars checked by script (found and fixed a 27-line function), core boundary, typing and two .tscn pass; no gate weakened"

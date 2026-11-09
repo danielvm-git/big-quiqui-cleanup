@@ -4,6 +4,8 @@ extends Control
 ## ScenePlayer Fsm decide the order. There is no per-scene code here.
 
 signal left(target: String)
+## The scene could not run (missing, invalid or a template with no view yet). Boot recovers.
+signal failed(scene: String)
 
 const SCENE_DIR: String = "res://data/scenes/"
 const OUTRO_POSE: String = "sparkle"
@@ -26,6 +28,7 @@ var scene_player: ScenePlayer = ScenePlayer.new()
 var hint: HintTimer = HintTimer.new(5.0)
 
 var _view: Control = null
+var _run: int = 0
 var _sink: GameSink = GameSink.new()
 var _quiqui: TextureRect = TextureRect.new()
 
@@ -33,11 +36,13 @@ var _quiqui: TextureRect = TextureRect.new()
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	var def: SceneDef = def_override
-	if def == null:
-		def = load("%s%s.tres" % [SCENE_DIR, scene_id]) as SceneDef
-	if def == null or not scene_player.load_scene(def):
-		push_error("scene %s is missing or invalid: %s" % [scene_id, scene_player.errors])
+	var path: String = "%s%s.tres" % [SCENE_DIR, scene_id]
+	if def == null and ResourceLoader.exists(path):
+		def = load(path) as SceneDef
+	if def == null or not scene_player.load_scene(def) or not _all_supported(def):
+		push_error("scene %s is missing, invalid or unsupported: %s" % [scene_id, scene_player.errors])
 		Log.error("scene_invalid", {"scene": scene_id, "errors": scene_player.errors.size()})
+		failed.emit.call_deferred(scene_id)
 		return
 	Log.info("scene_loaded", {"scene": scene_id, "steps": def.steps.size()})
 	_build_chrome(def)
@@ -60,6 +65,7 @@ func template() -> StepTemplate:
 
 
 func play_again() -> void:
+	_run += 1
 	Log.info("play_again", {"scene": scene_id})
 	_clear_view()
 	if outro_button != null:
@@ -84,10 +90,10 @@ func _build_chrome(def: SceneDef) -> void:
 	stage.add_child(_quiqui)
 	_sink.quiqui = _quiqui
 	_sink.host = stage
+	_sink.audio_host = audio_host()
 	home_button = _button("ui/home_button", Vector2(40, 40), go_home)
 	stage.add_child(home_button)
 	_build_meter(def)
-	_sink.play_music(def.music)
 	hint.hint_shown.connect(func() -> void: _set_hint(true))
 	hint.hint_hidden.connect(func() -> void: _set_hint(false))
 
@@ -106,6 +112,18 @@ func _build_background(def: SceneDef) -> void:
 	add_child(stage)
 	resized.connect(_center_stage)
 	_center_stage()
+
+
+func _all_supported(def: SceneDef) -> bool:
+	for step: StepDef in def.steps:
+		if not ViewFactory.supports(step.template):
+			return false
+	return true
+
+
+## Sounds go to the tree root, so a tap that changes scene is still heard.
+func audio_host() -> Node:
+	return get_tree().root
 
 
 func _is_map(def: SceneDef) -> bool:
@@ -173,9 +191,17 @@ func continue_to_next() -> void:
 
 func _on_step_completed() -> void:
 	var index: int = scene_player.step_index
-	if beat_sec > 0.0:
-		await get_tree().create_timer(beat_sec).timeout
-	if scene_player.state() != ScenePlayer.STEP or scene_player.step_index != index:
+	if beat_sec <= 0.0:
+		_finish_step(index, _run)
+		return
+	var tween: Tween = create_tween()
+	tween.tween_interval(beat_sec)
+	tween.tween_callback(_finish_step.bind(index, _run))
+
+
+## Ends a completed step. A beat that was overtaken (Home, play again) does nothing.
+func _finish_step(index: int, run: int) -> void:
+	if run != _run or scene_player.state() != ScenePlayer.STEP or scene_player.step_index != index:
 		return
 	Log.info("step_completed", {"scene": scene_id, "index": index})
 	scene_player.step_finished()
@@ -183,6 +209,7 @@ func _on_step_completed() -> void:
 
 
 func _on_exited(target: String) -> void:
+	_run += 1
 	Log.info("scene_left", {"scene": scene_id, "next": target})
 	left.emit(target)
 
@@ -202,7 +229,7 @@ func _show_outro() -> void:
 	_sink.play_sfx("success")
 	_sink.play_fx("sparkle")
 	if outro_button == null:
-		outro_button = _button("ui/play_button", Vector2(875, 450), continue_to_next)
+		outro_button = _button("ui/play_button", Vector2(840, 420), continue_to_next)
 		outro_button.size = Vector2(240, 240)
 		stage.add_child(outro_button)
 	outro_button.visible = true

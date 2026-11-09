@@ -9,6 +9,7 @@ const TARGET_SIZE: Vector2 = Vector2(180, 180)
 var template: TouchEachTemplate = TouchEachTemplate.new()
 
 var _pulse: Tween = null
+var _pulsed: Control = null
 
 
 func configure(params: Dictionary) -> void:
@@ -22,13 +23,13 @@ func configure(params: Dictionary) -> void:
 
 
 func set_hint(on: bool) -> void:
-	if _pulse != null:
-		_pulse.kill()
+	_stop_hint()
 	var left: Array[String] = template.remaining()
 	if not on or left.is_empty():
 		return
 	var target: Control = get_node(left[0]) as Control
 	target.pivot_offset = TARGET_SIZE * 0.5
+	_pulsed = target
 	_pulse = target.create_tween().set_loops()
 	_pulse.tween_property(target, "scale", Vector2(1.25, 1.25), 0.4)
 	_pulse.tween_property(target, "scale", Vector2.ONE, 0.4)
@@ -55,8 +56,7 @@ func _on_target_input(event: InputEvent, id: String, target: TextureRect) -> voi
 	if not event is InputEventScreenTouch or not (event as InputEventScreenTouch).pressed:
 		return
 	target.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	if _pulse != null:
-		_pulse.kill()
+	_stop_hint()
 	target.scale = Vector2.ONE
 	if template.touch(id):
 		_pop(target)
@@ -66,3 +66,11 @@ func _pop(target: TextureRect) -> void:
 	var tween: Tween = target.create_tween().set_parallel(true)
 	tween.tween_property(target, "scale", Vector2(1.5, 1.5), 0.25)
 	tween.tween_property(target, "modulate:a", 0.0, 0.3)
+
+
+func _stop_hint() -> void:
+	if _pulse != null:
+		_pulse.kill()
+	if _pulsed != null and is_instance_valid(_pulsed):
+		_pulsed.scale = Vector2.ONE
+	_pulsed = null

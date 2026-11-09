@@ -2,6 +2,12 @@ class_name ViewFactory
 extends RefCounted
 ## Builds the view of a step from its template id. The template ids are the only switch.
 
+const SUPPORTED: Array[String] = ["t20_drag_snap", "t21_touch_each", "t23_erase", "t25_map"]
+
+
+static func supports(template: String) -> bool:
+	return SUPPORTED.has(template)
+
 
 static func make(step: StepDef, clean_rooms: Array[String]) -> Control:
 	var params: Dictionary = step.params

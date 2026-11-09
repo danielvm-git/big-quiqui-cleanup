@@ -59,7 +59,7 @@ params = {
 "homes": {
 "ball": Vector2(980, 860),
 "plush": Vector2(1180, 940),
-"toy_duck": Vector2(800, 960)
+"toy_duck": Vector2(800, 940)
 },
 "items": ["ball", "plush", "toy_duck"],
 "target_rect": Rect2(430, 300, 320, 500)

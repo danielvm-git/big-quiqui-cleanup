@@ -7,6 +7,7 @@ signal touched
 var template: MapTemplate = MapTemplate.new()
 
 var _pulse: Tween = null
+var _pulsed: Control = null
 
 
 func configure(params: Dictionary) -> void:
@@ -26,12 +27,12 @@ func refresh() -> void:
 
 
 func set_hint(on: bool) -> void:
-	if _pulse != null:
-		_pulse.kill()
+	_stop_hint()
 	var dirty: Control = _first_dirty()
 	if not on or dirty == null:
 		return
 	dirty.pivot_offset = dirty.size * 0.5
+	_pulsed = dirty
 	_pulse = dirty.create_tween().set_loops()
 	_pulse.tween_property(dirty, "scale", Vector2(1.06, 1.06), 0.5)
 	_pulse.tween_property(dirty, "scale", Vector2.ONE, 0.5)
@@ -78,3 +79,11 @@ func _on_card_input(event: InputEvent, id: String) -> void:
 	touched.emit()
 	if event is InputEventScreenTouch and (event as InputEventScreenTouch).pressed:
 		template.choose_room(id)
+
+
+func _stop_hint() -> void:
+	if _pulse != null:
+		_pulse.kill()
+	if _pulsed != null and is_instance_valid(_pulsed):
+		_pulsed.scale = Vector2.ONE
+	_pulsed = null

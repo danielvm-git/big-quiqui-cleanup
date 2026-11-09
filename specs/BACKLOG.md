@@ -5,7 +5,7 @@ Slices, in order. Each one ends with something that runs. Update the status as s
 | Slice | Goal | Done when | Status |
 |---|---|---|---|
 | S0 | Skeleton and gates | The project boots, `Fsm` lives in the core, preflight passes, the core boundary check has a self-test | done |
-| S1 | First loop: the living room | `SceneDef`, `StepDef`, the scene player, `t23_erase`, `t20_drag_snap`, reactions, hint and gentle miss. A child cleans the room unaided and asks to play again | next |
+| S1 | First loop: the living room | `SceneDef`, `StepDef`, the scene player, `t23_erase`, `t20_drag_snap`, reactions, hint and gentle miss. A child cleans the room unaided and asks to play again | done |
 | S2 | The house | `t25_map` hub, `t21_touch_each`, the other four rooms as data, two dirt levels, the room meter | |
 | S3 | Reward and save | `t32_reward`, atomic save, stars and coins | |
 | S4 | Title and polish | `t0_title` with the parent gate, `t34_rub_reveal` for before and after, recorded voice, final art | |

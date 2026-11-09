@@ -48,13 +48,16 @@ func test_a_release_does_not_touch() -> void:
 	assert_eq(view.template.remaining().size(), 2)
 
 
-func test_a_synthesized_echo_is_dropped() -> void:
+func test_a_synthesized_echo_does_not_count_as_input() -> void:
 	var view: TouchView = _view()
+	watch_signals(view)
 	var echo: InputEventMouseButton = InputEventMouseButton.new()
 	echo.device = -1
 	echo.pressed = true
 	(view.get_node("lamp") as Control).gui_input.emit(echo)
-	assert_eq(view.template.remaining().size(), 2)
+	assert_signal_not_emitted(view, "touched")
+	_tap(view, "lamp")
+	assert_signal_emitted(view, "touched")
 
 
 func test_touching_all_completes() -> void:

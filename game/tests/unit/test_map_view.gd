@@ -54,14 +54,16 @@ func test_a_press_chooses_the_room() -> void:
 	assert_signal_emitted_with_parameters(view.template, "room_chosen", ["kitchen"])
 
 
-func test_an_echo_is_dropped() -> void:
+func test_an_echo_does_not_count_as_input() -> void:
 	var view: MapView = _view()
-	watch_signals(view.template)
+	watch_signals(view)
 	var echo: InputEventMouseButton = InputEventMouseButton.new()
 	echo.device = -1
 	echo.pressed = true
 	(view.get_node("kitchen") as Control).gui_input.emit(echo)
-	assert_signal_not_emitted(view.template, "room_chosen")
+	assert_signal_not_emitted(view, "touched")
+	_press(view, "kitchen")
+	assert_signal_emitted(view, "touched")
 
 
 func test_refresh_updates_the_badge() -> void:

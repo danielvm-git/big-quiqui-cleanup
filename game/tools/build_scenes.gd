@@ -70,12 +70,12 @@ func _carry(items: Array, homes: Dictionary, target: Rect2) -> StepDef:
 
 
 func _toys_living_room() -> StepDef:
-	var homes: Dictionary = {"ball": Vector2(980, 860), "plush": Vector2(1180, 940), "toy_duck": Vector2(800, 960)}
+	var homes: Dictionary = {"ball": Vector2(980, 860), "plush": Vector2(1180, 940), "toy_duck": Vector2(800, 940)}
 	return _carry(["ball", "plush", "toy_duck"], homes, Rect2(430, 300, 320, 500))
 
 
 func _dishes() -> StepDef:
-	var homes: Dictionary = {"bowl": Vector2(560, 880), "cupcake": Vector2(860, 960), "juice": Vector2(1120, 900)}
+	var homes: Dictionary = {"bowl": Vector2(560, 880), "cupcake": Vector2(860, 940), "juice": Vector2(1120, 900)}
 	return _carry(["bowl", "cupcake", "juice"], homes, Rect2(1220, 540, 360, 300))
 
 
@@ -87,7 +87,7 @@ func _touch_each(targets: Array, positions: Dictionary, art: Dictionary) -> Step
 
 func _tidy_clothes() -> StepDef:
 	var positions: Dictionary = {
-		"hat": Vector2(700, 880), "scarf": Vector2(1000, 960), "bow": Vector2(1300, 900), "plush": Vector2(900, 800)
+		"hat": Vector2(700, 880), "scarf": Vector2(1000, 940), "bow": Vector2(1300, 900), "plush": Vector2(900, 800)
 	}
 	var art: Dictionary = {"hat": "items/hat", "scarf": "items/scarf", "bow": "items/bow", "plush": "items/plush"}
 	return _touch_each(["hat", "scarf", "bow", "plush"], positions, art)
@@ -98,7 +98,7 @@ func _sweep_piles() -> StepDef:
 		"pile_1": Vector2(500, 820),
 		"pile_2": Vector2(900, 940),
 		"pile_3": Vector2(1350, 840),
-		"pile_4": Vector2(1650, 960)
+		"pile_4": Vector2(1650, 940)
 	}
 	var art: Dictionary = {}
 	for id: String in positions:

@@ -33,7 +33,7 @@ params = {
 "bow": Vector2(1300, 900),
 "hat": Vector2(700, 880),
 "plush": Vector2(900, 800),
-"scarf": Vector2(1000, 960)
+"scarf": Vector2(1000, 940)
 },
 "targets": ["hat", "scarf", "bow", "plush"]
 }

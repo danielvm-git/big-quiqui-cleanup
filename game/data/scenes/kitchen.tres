@@ -35,7 +35,7 @@ template = "t20_drag_snap"
 params = {
 "homes": {
 "bowl": Vector2(560, 880),
-"cupcake": Vector2(860, 960),
+"cupcake": Vector2(860, 940),
 "juice": Vector2(1120, 900)
 },
 "items": ["bowl", "cupcake", "juice"],

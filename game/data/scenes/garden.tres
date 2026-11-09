@@ -33,7 +33,7 @@ params = {
 "pile_1": Vector2(500, 820),
 "pile_2": Vector2(900, 940),
 "pile_3": Vector2(1350, 840),
-"pile_4": Vector2(1650, 960)
+"pile_4": Vector2(1650, 940)
 },
 "targets": ["pile_1", "pile_2", "pile_3", "pile_4"]
 }
