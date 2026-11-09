@@ -1,0 +1,25 @@
+# big-release: the GitHub Release is created through the API, so a protected main
+# never has to accept a release commit. Version ladder: v0.1.0 starts at the first
+# feature merge (slice S1); each later slice bumps by its commit types.
+tagFormat: "v${version}"
+initialVersion: "0.1.0"
+
+branches:
+  - main
+
+plugins:
+  - github
+
+# The Godot publisher would rewrite project.godot without committing it and create a
+# second release for the same tag. The `github` plugin alone owns the release.
+publishers:
+  godot:
+    enabled: false
+
+pluginConfigs:
+  github:
+    draftRelease: false
+    releaseName: "QuiQui Cleanup v{{ .Version }}"
+    successComment: "Released in v${version}"
+    releasedLabels:
+      - released
