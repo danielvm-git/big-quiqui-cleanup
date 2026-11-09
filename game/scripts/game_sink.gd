@@ -44,6 +44,8 @@ func play_fx(value: String) -> void:
 
 
 func play_music(key: String) -> void:
+	if key.is_empty():
+		return
 	var stream: AudioStream = Assets.sound(key)
 	if host == null or stream == null:
 		return

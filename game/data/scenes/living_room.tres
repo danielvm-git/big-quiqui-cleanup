@@ -73,3 +73,4 @@ id = "living_room"
 background = "backgrounds/living_room"
 music = "music/main_theme"
 steps = Array[ExtResource("2_lbvbf")]([SubResource("Resource_iugtw"), SubResource("Resource_3wrwf")])
+next = "house_map"

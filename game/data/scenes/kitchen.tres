@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_nm0rg"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_tey8c"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_hdcib"]
+
+[sub_resource type="Resource" id="Resource_tpv2s"]
+script = ExtResource("3_hdcib")
+kind = "sfx"
+value = "success"
+
+[sub_resource type="Resource" id="Resource_4vrmk"]
+script = ExtResource("3_hdcib")
+kind = "pose"
+value = "jump"
+
+[sub_resource type="Resource" id="Resource_ks8t6"]
+script = ExtResource("3_hdcib")
+kind = "fx"
+value = "sparkle"
+
+[sub_resource type="Resource" id="Resource_riykr"]
+script = ExtResource("3_hdcib")
+kind = "sfx"
+value = "soft_miss"
+
+[sub_resource type="Resource" id="Resource_61jo0"]
+script = ExtResource("3_hdcib")
+kind = "pose"
+value = "idle"
+
+[sub_resource type="Resource" id="Resource_2k7ea"]
+script = ExtResource("2_tey8c")
+template = "t20_drag_snap"
+params = {
+"homes": {
+"bowl": Vector2(560, 880),
+"cupcake": Vector2(860, 960),
+"juice": Vector2(1120, 900)
+},
+"items": ["bowl", "cupcake", "juice"],
+"target_rect": Rect2(1220, 540, 360, 300)
+}
+on_hit = Array[ExtResource("3_hdcib")]([SubResource("Resource_tpv2s"), SubResource("Resource_4vrmk"), SubResource("Resource_ks8t6")])
+on_miss = Array[ExtResource("3_hdcib")]([SubResource("Resource_riykr"), SubResource("Resource_61jo0")])
+
+[sub_resource type="Resource" id="Resource_xfhwd"]
+script = ExtResource("3_hdcib")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_2gm17"]
+script = ExtResource("3_hdcib")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_yky0x"]
+script = ExtResource("2_tey8c")
+template = "t23_erase"
+params = {
+"cell": 20.0,
+"layer_rect": Rect2(200, 800, 1500, 280),
+"levels": 2,
+"radius": 60.0,
+"threshold": 0.9,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_hdcib")]([SubResource("Resource_xfhwd"), SubResource("Resource_2gm17")])
+
+[resource]
+script = ExtResource("1_nm0rg")
+id = "kitchen"
+background = "backgrounds/kitchen"
+music = "music/main_theme"
+steps = Array[ExtResource("2_tey8c")]([SubResource("Resource_2k7ea"), SubResource("Resource_yky0x")])
+next = "house_map"

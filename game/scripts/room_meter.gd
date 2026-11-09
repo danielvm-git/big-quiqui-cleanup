@@ -2,7 +2,7 @@ class_name RoomMeter
 extends Control
 ## A row of dots, one per step of the room. They fill as steps finish (no numbers, no text).
 
-const DOT_SIZE: float = 56.0
+const DOT_SIZE: float = 72.0
 const GAP: float = 16.0
 
 var _filled: int = 0
