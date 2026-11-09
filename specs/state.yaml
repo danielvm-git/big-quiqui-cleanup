@@ -1,5 +1,5 @@
 active_epic: e01
-active_story: e01s04
+active_story: e01s05
 branch: feat/e01-living-room
 decisions:
   - gate: "EPIC mapping"
