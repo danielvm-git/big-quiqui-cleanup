@@ -1,0 +1,62 @@
+epic: e02
+stories:
+  - id: e02s01
+    title: Stage and geometry
+    tasks:
+      - id: e02s01-t1
+        what: GeometryOracle (rewritten for this repo, BACKLOG port) with background cover and hit target checks
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_geometry_oracle -gexit
+      - id: e02s01-t2
+        what: Player stage 1920x1080 centered in any viewport; ToyView uses stage coordinates
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_stage_layout -gexit
+  - id: e02s02
+    title: t21_touch_each
+    tasks:
+      - id: e02s02-t1
+        what: TouchEachTemplate touches each target once, repeat touch is not a miss, done when all touched
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t21_touch_each -gexit
+      - id: e02s02-t2
+        what: TouchView shows the targets and routes taps
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_touch_view -gexit
+  - id: e02s03
+    title: Two dirt levels
+    tasks:
+      - id: e02s03-t1
+        what: DirtView draws level one heavier than level two
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_dirt_levels -gexit
+  - id: e02s04
+    title: House state and room meter
+    tasks:
+      - id: e02s04-t1
+        what: HouseState tracks clean rooms in memory
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_house_state -gexit
+      - id: e02s04-t2
+        what: RoomMeter row of dots fills as steps finish
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_room_meter -gexit
+  - id: e02s05
+    title: t25_map
+    tasks:
+      - id: e02s05-t1
+        what: MapTemplate picks a room by tap, tracks clean rooms
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t25_map -gexit
+      - id: e02s05-t2
+        what: MapView shows a cloud on dirty rooms and a sparkle on clean ones
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_map_view -gexit
+  - id: e02s06
+    title: Navigation
+    tasks:
+      - id: e02s06-t1
+        what: ScenePlayer leave_to; Player runs the map step, marks rooms clean, routes Home and outro to the map; Boot opens scenes by id
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_navigation -gexit
+  - id: e02s07
+    title: Five rooms playable
+    tasks:
+      - id: e02s07-t1
+        what: Assets ported; kitchen, bathroom, bedroom, garden and house_map as data that validate
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_house_data -gexit
+      - id: e02s07-t2
+        what: Every scene at 16:9, 4:3 and iPad passes GeometryOracle, and the whole house can be cleaned end to end
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_house_flow -gexit
+      - id: e02s07-t3
+        what: In-engine screenshots of the map and every room
+        verify: bash scripts/capture_scene.sh house_map

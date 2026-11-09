@@ -1,14 +1,14 @@
-active_epic: e01
-active_story: none
-branch: feat/e01-living-room
+active_epic: e02
+active_story: e02s01
+branch: feat/e02-the-house
 decisions:
   - gate: "EPIC mapping"
-    decision: "e01 = backlog slice S1 (user chose it in chat)"
+    decision: "e01 = slice S1 (done, merged, v0.1.0). e02 = slice S2, requested by the user in chat"
   - gate: "Missing scaffolding"
-    decision: "Created state.yaml, release-plan.yaml, execution-status.yaml, e01 capsule. No CONVENTIONS.md: AGENTS.md is the conventions file"
+    decision: "AGENTS.md is the conventions file; no CONVENTIONS.md"
   - gate: "Commit attribution"
     decision: "No Co-Authored-By trailer: AGENTS.md and .githooks/commit-msg forbid it"
-  - gate: "request-review / respond-review"
-    decision: "Fixed review findings 1-5, 9, 10 with tests (hint restart, first-touch reaction, stuck carry, completion beat, echo filter in views, toy touch/tween hygiene, null scene guard). Deferred: 6 (single booleans in HintTimer/templates are not flag clusters; revisit if a state grows), 8 (wait reaction needs an async sink, S2)"
-  - gate: "audit-code"
-    decision: "Own checklist: size bars, typing, core boundary, two tscn all pass; no gate weakened"
+  - gate: "e01 review"
+    decision: "Fixed review findings 1-5, 9, 10. Deferred 6 (single booleans are not flag clusters) and 8 (wait reaction needs an async sink)"
+  - gate: "e02 scope"
+    decision: "Added e02s01 Stage and geometry: S1 used raw viewport coordinates, which drift on 4:3. Home and outro lead to the map; play again is tapping the room again"

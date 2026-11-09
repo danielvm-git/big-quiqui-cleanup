@@ -5,3 +5,8 @@ epics:
     title: The living room
     wsjf: 1
     capsule: specs/epics/e01-living-room
+  - id: e02
+    slice: S2
+    title: The house
+    wsjf: 2
+    capsule: specs/epics/e02-the-house
