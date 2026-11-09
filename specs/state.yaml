@@ -1,0 +1,10 @@
+active_epic: e01
+active_story: e01s01
+branch: feat/e01-living-room
+decisions:
+  - gate: "EPIC mapping"
+    decision: "e01 = backlog slice S1 (user chose it in chat)"
+  - gate: "Missing scaffolding"
+    decision: "Created state.yaml, release-plan.yaml, execution-status.yaml, e01 capsule. No CONVENTIONS.md: AGENTS.md is the conventions file"
+  - gate: "Commit attribution"
+    decision: "No Co-Authored-By trailer: AGENTS.md and .githooks/commit-msg forbid it"
