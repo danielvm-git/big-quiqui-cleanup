@@ -59,3 +59,12 @@ func test_the_hint_has_no_way_to_end_a_step() -> void:
 	var hint: HintTimer = HintTimer.new(4.0)
 	assert_false(hint.has_signal("completed"))
 	assert_false(hint.has_signal("timeout"))
+
+
+func test_start_rearms_a_stopped_hint() -> void:
+	var hint: HintTimer = HintTimer.new(4.0)
+	hint.stop()
+	hint.start()
+	watch_signals(hint)
+	hint.tick(5.0)
+	assert_signal_emitted(hint, "hint_shown")

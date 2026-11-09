@@ -37,6 +37,11 @@ func is_showing() -> bool:
 	return _showing
 
 
+func start() -> void:
+	_stopped = false
+	notify_input()
+
+
 func stop() -> void:
 	_stopped = true
 	notify_input()

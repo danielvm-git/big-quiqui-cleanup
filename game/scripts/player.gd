@@ -8,6 +8,8 @@ signal left(target: String)
 const SCENE_DIR: String = "res://data/scenes/"
 const OUTRO_POSE: String = "sparkle"
 
+## A short celebration after a step is complete. It never ends a step, which is already done.
+var beat_sec: float = 0.6
 var scene_id: String = "living_room"
 var scene_player: ScenePlayer = ScenePlayer.new()
 var hint: HintTimer = HintTimer.new(5.0)
@@ -21,8 +23,8 @@ var _outro: Control = null
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	var def: SceneDef = load("%s%s.tres" % [SCENE_DIR, scene_id]) as SceneDef
-	if not scene_player.load_scene(def):
-		push_error("scene %s is invalid: %s" % [scene_id, scene_player.errors])
+	if def == null or not scene_player.load_scene(def):
+		push_error("scene %s is missing or invalid: %s" % [scene_id, scene_player.errors])
 		return
 	_build_chrome(def)
 	scene_player.step_started.connect(_on_step_started)
@@ -48,6 +50,7 @@ func play_again() -> void:
 	if _outro != null:
 		_outro.visible = false
 	scene_player.restart()
+	hint.start()
 	_begin()
 
 
@@ -114,6 +117,11 @@ func _make_view(step: StepDef) -> Control:
 
 
 func _on_step_completed() -> void:
+	var index: int = scene_player.step_index
+	if beat_sec > 0.0:
+		await get_tree().create_timer(beat_sec).timeout
+	if scene_player.state() != ScenePlayer.STEP or scene_player.step_index != index:
+		return
 	scene_player.step_finished()
 	scene_player.advance()
 

@@ -87,3 +87,10 @@ func test_no_timer_ends_the_step() -> void:
 	template.pick("bear")
 	assert_false(template.is_done())
 	assert_eq(template.held, "bear")
+
+
+func test_an_abandoned_carry_does_not_lock_the_step() -> void:
+	var template: DragSnapTemplate = _make()
+	template.pick("bear")
+	assert_true(template.pick("ball"))
+	assert_eq(template.held, "ball")

@@ -23,7 +23,7 @@ func remaining() -> Array[String]:
 
 
 func pick(item_id: String) -> bool:
-	if held != "" or not _tray.has(item_id):
+	if not _tray.has(item_id):
 		return false
 	held = item_id
 	return true

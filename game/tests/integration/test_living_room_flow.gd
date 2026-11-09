@@ -6,6 +6,7 @@ extends GutTest
 
 func _player() -> Player:
 	var player: Player = (load("res://scenes/player.tscn") as PackedScene).instantiate() as Player
+	player.beat_sec = 0.0
 	add_child_autofree(player)
 	return player
 
@@ -66,3 +67,34 @@ func test_home_leaves_from_any_step() -> void:
 	watch_signals(player)
 	player.go_home()
 	assert_signal_emitted(player, "left")
+
+
+func test_the_hint_comes_back_after_play_again() -> void:
+	var player: Player = _player()
+	_wipe(player.template() as EraseTemplate)
+	_tidy(player.template() as DragSnapTemplate)
+	player.play_again()
+	watch_signals(player.hint)
+	player.hint.tick(60.0)
+	assert_signal_emitted(player.hint, "hint_shown")
+
+
+func test_the_beat_lets_the_last_answer_show_before_the_step_ends() -> void:
+	var player: Player = (load("res://scenes/player.tscn") as PackedScene).instantiate() as Player
+	player.beat_sec = 0.2
+	add_child_autofree(player)
+	_wipe(player.template() as EraseTemplate)
+	assert_eq(player.scene_player.state(), ScenePlayer.STEP)
+	assert_eq(player.scene_player.step_index, 0)
+	await wait_seconds(0.4)
+	assert_eq(player.scene_player.step_index, 1)
+
+
+func test_home_during_the_beat_is_not_overridden() -> void:
+	var player: Player = (load("res://scenes/player.tscn") as PackedScene).instantiate() as Player
+	player.beat_sec = 0.2
+	add_child_autofree(player)
+	_wipe(player.template() as EraseTemplate)
+	player.go_home()
+	await wait_seconds(0.4)
+	assert_eq(player.scene_player.state(), ScenePlayer.EXIT)

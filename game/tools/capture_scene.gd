@@ -10,6 +10,7 @@ func _init() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	var prefix: String = args[1] if args.size() > 1 else "/tmp/qq_capture"
 	_player = (load("res://scenes/player.tscn") as PackedScene).instantiate() as Player
+	_player.beat_sec = 0.0
 	_player.scene_id = args[0] if args.size() > 0 else "living_room"
 	root.add_child(_player)
 	await _shot(prefix + "_1_dirty.png")

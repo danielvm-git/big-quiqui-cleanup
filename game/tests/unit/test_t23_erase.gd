@@ -114,3 +114,22 @@ func test_the_grid_can_be_read_back_for_drawing() -> void:
 	template.rub_begin(Vector2(110, 110))
 	assert_true(template.is_cell_cleared(0, 0))
 	assert_false(template.is_cell_cleared(19, 9))
+
+
+func test_a_lone_tap_reacts_in_the_same_call() -> void:
+	var template: EraseTemplate = _make()
+	watch_signals(template)
+	template.rub_begin(Vector2(150, 150))
+	assert_signal_emitted(template, "hit")
+	assert_gt(template.coverage(), 0.0)
+
+
+func test_a_mouse_release_ends_the_rub() -> void:
+	var template: EraseTemplate = _make()
+	template.rub_begin(Vector2(150, 150))
+	var up: InputEventMouseButton = InputEventMouseButton.new()
+	up.pressed = false
+	up.device = 0
+	template.handle_input(up)
+	template.rub_to(Vector2(400, 250))
+	assert_gt(template.coverage(), 0.0)

@@ -39,10 +39,10 @@ func set_hint(on: bool) -> void:
 
 
 func _gui_input(event: InputEvent) -> void:
-	touched.emit()
-	template.handle_input(event)
 	if StepTemplate.is_echo(event):
 		return
+	touched.emit()
+	template.handle_input(event)
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
 		_sponge.visible = touch.pressed

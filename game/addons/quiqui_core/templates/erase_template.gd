@@ -21,7 +21,7 @@ var _rubbing: bool = false
 func setup(params: Dictionary) -> void:
 	super.setup(params)
 	_rect = params.get("layer_rect", Rect2(0, 0, 100, 100)) as Rect2
-	_cell = float(params.get("cell", 20.0))
+	_cell = maxf(float(params.get("cell", 20.0)), 1.0)
 	_radius = float(params.get("radius", 30.0))
 	_threshold = float(params.get("threshold", 0.9))
 	_levels = int(params.get("levels", 1))
@@ -44,7 +44,9 @@ func is_cell_cleared(col: int, row: int) -> bool:
 func rub_begin(point: Vector2) -> void:
 	_rubbing = true
 	_last = point
-	_clear_around(point)
+	if _clear_around(point) > 0:
+		hit.emit()
+		_check_level()
 
 
 func rub_to(point: Vector2) -> void:
@@ -75,6 +77,8 @@ func handle_input(event: InputEvent) -> void:
 			rub_begin(touch.position)
 		else:
 			rub_end()
+	elif event is InputEventMouseButton and not (event as InputEventMouseButton).pressed:
+		rub_end()
 	elif event is InputEventScreenDrag:
 		rub_to((event as InputEventScreenDrag).position)
 	elif event is InputEventMouseMotion and (event as InputEventMouseMotion).button_mask != 0:

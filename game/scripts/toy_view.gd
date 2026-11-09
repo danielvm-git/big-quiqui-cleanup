@@ -12,6 +12,7 @@ var _homes: Dictionary = {}
 var _target: Rect2 = Rect2()
 var _toys: Dictionary = {}
 var _pulse: Tween = null
+var _slide: Dictionary = {}
 
 
 func configure(params: Dictionary) -> void:
@@ -50,6 +51,8 @@ func _add_toy(id: String) -> void:
 
 
 func _on_toy_input(event: InputEvent, id: String, toy: TextureRect) -> void:
+	if StepTemplate.is_echo(event):
+		return
 	touched.emit()
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
@@ -62,6 +65,8 @@ func _on_toy_input(event: InputEvent, id: String, toy: TextureRect) -> void:
 func _on_touch(event: InputEventScreenTouch, id: String, toy: TextureRect, point: Vector2) -> void:
 	if event.pressed:
 		if template.pick(id):
+			if _slide.has(id):
+				(_slide[id] as Tween).kill()
 			_stop_pulse(toy)
 		return
 	if template.held != id:
@@ -79,6 +84,7 @@ func _stop_pulse(toy: TextureRect) -> void:
 
 
 func _deliver(toy: TextureRect) -> void:
+	toy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var tween: Tween = toy.create_tween().set_parallel(true)
 	tween.tween_property(toy, "position", _target.get_center() - TOY_SIZE * 0.5, 0.2)
 	tween.tween_property(toy, "modulate:a", 0.0, 0.3)
@@ -86,4 +92,5 @@ func _deliver(toy: TextureRect) -> void:
 
 func _return_home(id: String, toy: TextureRect) -> void:
 	var home: Vector2 = (_homes[id] as Vector2) - TOY_SIZE * 0.5
-	toy.create_tween().tween_property(toy, "position", home, 0.25).set_trans(Tween.TRANS_BACK)
+	_slide[id] = toy.create_tween()
+	(_slide[id] as Tween).tween_property(toy, "position", home, 0.25).set_trans(Tween.TRANS_BACK)
