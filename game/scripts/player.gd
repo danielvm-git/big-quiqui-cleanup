@@ -7,9 +7,13 @@ signal left(target: String)
 
 const SCENE_DIR: String = "res://data/scenes/"
 const OUTRO_POSE: String = "sparkle"
+const STAGE_SIZE: Vector2 = Vector2(1920, 1080)
+const HIT_GROUP: String = "hit_target"
 
 ## A short celebration after a step is complete. It never ends a step, which is already done.
 var beat_sec: float = 0.6
+## Content lives on a 1920x1080 stage centered in any screen; only the background fills it.
+var stage: Control = Control.new()
 var scene_id: String = "living_room"
 var scene_player: ScenePlayer = ScenePlayer.new()
 var hint: HintTimer = HintTimer.new(5.0)
@@ -70,18 +74,28 @@ func _build_chrome(def: SceneDef) -> void:
 	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background.set_anchors_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background.add_to_group("background")
 	add_child(background)
+	stage.size = STAGE_SIZE
+	stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(stage)
+	resized.connect(_center_stage)
+	_center_stage()
 	_quiqui.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_quiqui.size = Vector2(380, 380)
 	_quiqui.position = Vector2(1480, 500)
 	_quiqui.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_quiqui)
+	stage.add_child(_quiqui)
 	_sink.quiqui = _quiqui
-	_sink.host = self
-	add_child(_button("ui/home_button", Vector2(40, 40), go_home))
+	_sink.host = stage
+	stage.add_child(_button("ui/home_button", Vector2(40, 40), go_home))
 	_sink.play_music(def.music)
 	hint.hint_shown.connect(func() -> void: _set_hint(true))
 	hint.hint_hidden.connect(func() -> void: _set_hint(false))
+
+
+func _center_stage() -> void:
+	stage.position = (size - STAGE_SIZE) * 0.5
 
 
 func go_home() -> void:
@@ -97,6 +111,7 @@ func _button(key: String, at: Vector2, action: Callable) -> TextureButton:
 	button.size = Vector2(170, 170)
 	button.position = at
 	button.pressed.connect(action)
+	button.add_to_group(HIT_GROUP)
 	return button
 
 
@@ -105,8 +120,8 @@ func _on_step_started(index: int, step: StepDef) -> void:
 	_clear_view()
 	hint.notify_input()
 	_view = _make_view(step)
-	add_child(_view)
-	move_child(_view, 1)
+	stage.add_child(_view)
+	stage.move_child(_view, 0)
 	var template_now: StepTemplate = template()
 	template_now.hit.connect(func() -> void: ReactionRunner.run(step.on_hit, _sink))
 	template_now.miss.connect(func() -> void: ReactionRunner.run(step.on_miss, _sink))
@@ -150,7 +165,7 @@ func _show_outro() -> void:
 	if _outro == null:
 		_outro = _button("ui/play_button", Vector2(875, 450), play_again)
 		_outro.size = Vector2(240, 240)
-		add_child(_outro)
+		stage.add_child(_outro)
 	_outro.visible = true
 
 

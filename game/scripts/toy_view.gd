@@ -45,6 +45,7 @@ func _add_toy(id: String) -> void:
 	toy.size = TOY_SIZE
 	toy.position = (_homes[id] as Vector2) - TOY_SIZE * 0.5
 	toy.mouse_filter = Control.MOUSE_FILTER_STOP
+	toy.add_to_group("hit_target")
 	toy.gui_input.connect(_on_toy_input.bind(id, toy))
 	add_child(toy)
 	_toys[id] = toy
@@ -56,10 +57,10 @@ func _on_toy_input(event: InputEvent, id: String, toy: TextureRect) -> void:
 	touched.emit()
 	if event is InputEventScreenTouch:
 		var touch: InputEventScreenTouch = event as InputEventScreenTouch
-		_on_touch(touch, id, toy, toy.get_global_transform() * touch.position)
+		_on_touch(touch, id, toy, toy.position + touch.position)
 	elif event is InputEventScreenDrag and template.held == id:
 		var drag: InputEventScreenDrag = event as InputEventScreenDrag
-		toy.position = toy.get_global_transform() * drag.position - TOY_SIZE * 0.5
+		toy.position = toy.position + drag.position - TOY_SIZE * 0.5
 
 
 func _on_touch(event: InputEventScreenTouch, id: String, toy: TextureRect, point: Vector2) -> void:
