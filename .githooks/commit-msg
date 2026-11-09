@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Enforces AGENTS.md: Conventional Commits, a 72-character subject, no AI attribution.
+set -uo pipefail
+MSG_FILE="${1:?missing commit message file}"
+SUBJECT=$(head -1 "$MSG_FILE")
+
+if ! printf '%s' "$SUBJECT" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9_.-]+\))?!?: .+'; then
+	printf 'commit-msg: not a Conventional Commit: %s\n' "$SUBJECT" >&2
+	printf '   expected: <type>(<scope>): <subject>  e.g. feat(s1): add the scene player\n' >&2
+	exit 1
+fi
+
+if [ ${#SUBJECT} -gt 72 ]; then
+	printf 'commit-msg: subject is %s chars (max 72)\n' "${#SUBJECT}" >&2
+	exit 1
+fi
+
+if grep -qiE '^co[- ]authored[- ]by:' "$MSG_FILE"; then
+	printf 'commit-msg: Co-authored-by is not allowed (AGENTS.md)\n' >&2
+	exit 1
+fi
+
+if grep -qiE '(generated with|written by|assisted by).*(claude|codex|gemini|copilot|gpt|anthropic|openai)' "$MSG_FILE"; then
+	printf 'commit-msg: AI attribution footer is not allowed (AGENTS.md)\n' >&2
+	exit 1
+fi
+
+exit 0

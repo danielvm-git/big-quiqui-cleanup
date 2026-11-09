@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Static gate before every commit. The full chain (including the tests) runs with
+# `bash scripts/preflight.sh`; this hook stays fast enough to keep commits honest.
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+exec bash scripts/preflight.sh --fast

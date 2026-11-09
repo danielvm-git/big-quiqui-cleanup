@@ -1,0 +1,23 @@
+# Godot
+game/.godot/
+build/
+
+# Local logs and user data
+*.log
+logs/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# Python caches
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Reverse-engineering workspace (pulled APKs, never committed)
+.rea/

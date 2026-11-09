@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuiQui Line Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: same teardown-sheet system as the Builder design page. 960px column, plates scroll sideways. */
+:root{
+  --bg:#F4F5FA; --paper:#FFFFFF; --fg:#1B1F3A; --muted:#5D6382; --line:#D5D8E6;
+  --accent:#D93A73; --a1:#C9871A; --a2:#16907F; --a3:#6A58C9; --decline:#9AA0B8;
+  --tint-accent:#FBE4EC; --tint-a1:#FAEFD9; --tint-a2:#DDF3EF; --tint-a3:#E9E5FA; --tint-mute:#ECEEF4;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11132A; --paper:#1A1D38; --fg:#E9EAF4; --muted:#A3A8C6; --line:#33385C;
+  --accent:#F06A98; --a1:#E8AE4C; --a2:#3CC2AE; --a3:#9C8CF0; --decline:#6B7192;
+  --tint-accent:#3A1D2E; --tint-a1:#382C17; --tint-a2:#123430; --tint-a3:#272250; --tint-mute:#23274A;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11132A; --paper:#1A1D38; --fg:#E9EAF4; --muted:#A3A8C6; --line:#33385C;
+  --accent:#F06A98; --a1:#E8AE4C; --a2:#3CC2AE; --a3:#9C8CF0; --decline:#6B7192;
+  --tint-accent:#3A1D2E; --tint-a1:#382C17; --tint-a2:#123430; --tint-a3:#272250; --tint-mute:#23274A;
+  color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:960px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.75rem;font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+h4{font-size:1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+a{color:var(--accent)}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mono{font-family:var(--mono);font-size:.86em}
+section,header{display:flex;flex-direction:column;gap:16px}
+.lede{font-size:1.12rem;color:var(--muted)}
+.lede strong{color:var(--fg)}
+.plate{background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow-x:auto}
+.plate svg{display:block;min-width:720px;width:100%;height:auto}
+svg text{font-family:var(--body);fill:var(--fg)}
+svg .m{font-family:var(--mono);fill:var(--muted)}
+svg .h{font-family:var(--display);font-weight:700}
+.cap{font-size:.9rem;color:var(--muted)}
+.tbl{overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.88rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+tbody tr:last-child td{border-bottom:0}
+td.id{font-family:var(--mono);white-space:nowrap;font-size:.82rem}
+td.c{text-align:center;font-family:var(--mono)}
+tr.grp td{background:var(--tint-mute);font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dim{color:var(--muted)}
+.chip{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap;background:var(--t,var(--tint-mute));color:var(--fg);margin:1px 3px 1px 0}
+.w1{--t:var(--tint-accent)} .w2{--t:var(--tint-a2)} .w3{--t:var(--tint-a3)} .wx{--t:var(--tint-a1)} .we{--t:var(--tint-mute)}
+.fa{--t:var(--tint-a1)} .fb{--t:var(--tint-a2)} .fc{--t:var(--tint-a3)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:700px){.cards{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--accent);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .n{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.card p{font-size:.9rem;color:var(--muted)}
+.card .ref{font-size:.86rem}
+.card a.go{font-family:var(--mono);font-size:.78rem}
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px;margin:0;padding:0;list-style:none}
+@media (max-width:640px){.rules{grid-template-columns:1fr}}
+.rules li{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.rules b{font-family:var(--display);font-size:1.05rem}
+.rules span{font-size:.9rem;color:var(--muted)}
+.callout{background:var(--tint-accent);border-radius:6px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+pre{margin:0;padding:18px;background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow-x:auto;font-family:var(--mono);font-size:.82rem;line-height:1.6}
+.order{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.order{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.order{grid-template-columns:1fr}}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.step b{font-family:var(--display);font-size:1rem}
+.step .k{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.step span.w{font-size:.84rem;color:var(--muted)}
+.refbox{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--a1);border-radius:6px;padding:16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.refbox{grid-template-columns:1fr}}
+.refbox ul{margin:0;padding-left:18px;font-size:.9rem;display:flex;flex-direction:column;gap:5px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.facts b{color:var(--fg);font-weight:500}
+.bars{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.bar{display:grid;grid-template-columns:96px minmax(0,1fr) 36px;gap:8px;align-items:center;font-size:.78rem}
+.bar i{display:block;height:10px;background:var(--accent);border-radius:2px}
+.bar span:last-child{font-family:var(--mono);color:var(--muted);text-align:right}
+.strip{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:8px;font-size:.86rem}
+.strip .row{display:grid;grid-template-columns:70px minmax(0,1fr);gap:10px;align-items:baseline}
+.strip .l{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.gamesection{border-top:2px solid var(--line);padding-top:36px}
+.nav{display:flex;flex-wrap:wrap;gap:6px 12px;font-family:var(--mono);font-size:.78rem}
+</style>
+</head><body>
+<div class="wrap">
+<header>
+  <span class="eyebrow">Plan · QuiQui line · Nov 2026</span>
+  <h1>Nine QuiQui games, one core</h1>
+  <p class="lede">One QuiQui game for each kind of TutoTOONS game. All nine run on the <strong>same scene player and template library</strong>. What differs is scene data, the hub, and a few game-specific modules. Each game is matched to the closest TutoTOONS title so we copy shape from something that exists.</p>
+  <p class="cap">All ids and file names are English, as decided for the restart. Waves and template names follow <span class="mono">specs/product/SCOPE_LATEST.yaml</span> in big-quiqui-v2, now a frozen reference. This is a plan, not an approved spec. Each game still needs its own scope, slices and tasks before code.</p>
+  <div class="nav"><a href="#game-cleanup">cleanup</a><a href="#game-care">care</a><a href="#game-story">story</a><a href="#game-salon">salon</a><a href="#game-adventure">adventure</a><a href="#game-kitchen">kitchen</a><a href="#game-dance">dance</a><a href="#game-flusier">flusier</a><a href="#game-town">town</a></div>
+</header>
+<section>
+  <span class="eyebrow">Diagram 1 · The line</span>
+  <h2>Nine games, eight TutoTOONS types</h2>
+  <p>The eight types come from the matrix of the 24 titles we pulled. Care and Flusier share one type (pet care and collect) but differ in form. Kitchen has no primary game in the sample, so it is composed from several. Every other type has a real reference.</p>
+  <div class="cards"><div class="card"><span class="n">1 · Cleanup &amp; chores</span><h3>QuiQui Cleanup</h3><p>A messy house. The child tidies room by room and watches it sparkle.</p>
+  <span class="ref">Closest: <b>Sweet Baby Girl Cleanup 5</b> <span class="chip fa">Form A</span><br><span class="dim">51 own types · 180 scenes</span></span>
+  <div><a class="go" href="#game-cleanup">plan below</a> · <span class="mono dim">big-quiqui-cleanup/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">2 · Pet &amp; baby care, collect</span><h3>QuiQui Care</h3><p>Take care of QuiQui through her day: feed, wash, dress, play, sleep.</p>
+  <span class="ref">Closest: <b>Giggle Babies</b> <span class="chip fb">Form B</span><br><span class="dim">1,959 own types · 13 files</span></span>
+  <div><a class="go" href="#game-care">plan below</a> · <span class="mono dim">big-quiqui-care/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">3 · Story &amp; daily routine</span><h3>QuiQui Story</h3><p>A day with QuiQui, told in voice and pictures, with small tasks inside each chapter.</p>
+  <span class="ref">Closest: <b>Sweet Baby Girl Mermaid Life</b> <span class="chip fa">Form A</span><br><span class="dim">9 own types · 105 scenes</span></span>
+  <div><a class="go" href="#game-story">plan below</a> · <span class="mono dim">big-quiqui-story/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">4 · Salon &amp; makeover</span><h3>QuiQui Salon</h3><p>Animal friends visit the salon. The child washes, styles, colors and decorates, then takes a photo.</p>
+  <span class="ref">Closest: <b>Princess Gloria Makeup Salon</b> <span class="chip fa">Form A</span><br><span class="dim">7 own types · 73 scenes</span></span>
+  <div><a class="go" href="#game-salon">plan below</a> · <span class="mono dim">big-quiqui-salon/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">5 · Adventure &amp; movement</span><h3>QuiQui Adventure</h3><p>QuiQui explores a map and plays small movement games. Every game ends well.</p>
+  <span class="ref">Closest: <b>My Baby Unicorn</b> <span class="chip fa">Form A</span><br><span class="dim">14 own types · 189 scenes</span></span>
+  <div><a class="go" href="#game-adventure">plan below</a> · <span class="mono dim">big-quiqui-adventure/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">6 · Kitchen &amp; cooking</span><h3>QuiQui Kitchen</h3><p>Choose a recipe, find and prepare the food, cook it, and serve it to a friend.</p>
+  <span class="ref">Closest: <b>Sweet Baby Girl Summer Camp + Smolsies My Cute Pet House</b> <span class="chip fa">Form A + B</span><br><span class="dim">8 own types · 75 scenes</span></span>
+  <div><a class="go" href="#game-kitchen">plan below</a> · <span class="mono dim">big-quiqui-kitchen/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">7 · Music &amp; dance</span><h3>QuiQui Dance</h3><p>Friends dance on a stage. The child taps to the beat and the stage lights up.</p>
+  <span class="ref">Closest: <b>Kpopsies</b> <span class="chip fb">Form B</span><br><span class="dim">1,520 own types · 14 files</span></span>
+  <div><a class="go" href="#game-dance">plan below</a> · <span class="mono dim">big-quiqui-dance/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">8 · Pet care &amp; collect, rooms</span><h3>QuiQui Flusier</h3><p>A room full of small pets. The child hatches them, plays with toys, and fills the room. The name follows the folder and can change.</p>
+  <span class="ref">Closest: <b>Fluvsies</b> <span class="chip fc">Form C</span><br><span class="dim">4,351 own types · 29 files + 25 packs</span></span>
+  <div><a class="go" href="#game-flusier">plan below</a> · <span class="mono dim">big-quiqui-flusier/specs/product/GAME_PLAN.html</span></div></div><div class="card"><span class="n">9 · Town &amp; world sandbox</span><h3>QuiQui Town</h3><p>QuiQui lives in a small town. The child walks around, decorates a home and visits friends.</p>
+  <span class="ref">Closest: <b>Dopples World</b> <span class="chip fc">Form C</span><br><span class="dim">3,993 own types · 55 files + 52 packs</span></span>
+  <div><a class="go" href="#game-town">plan below</a> · <span class="mono dim">big-quiqui-town/specs/product/GAME_PLAN.html</span></div></div></div>
+</section>
+<section>
+  <span class="eyebrow">Diagram 2 · Common architecture</span>
+  <h2>What every game shares</h2>
+  <p>Everything in the red part is the same code in all nine games. Everything in the gold part is written per game. The core is a Godot addon, <span class="mono">quiqui_core</span>.</p>
+  <div class="plate"><svg viewBox="0 0 960 470" role="img" aria-label="Layers shared by all nine games and the part each game owns">
+  <text x="22" y="52" class="m" font-size="11">GAME</text>
+  <text x="22" y="262" class="m" font-size="11">CORE</text>
+  <line x1="62" y1="24" x2="62" y2="206" stroke="var(--a1)" stroke-width="3"/>
+  <line x1="62" y1="222" x2="62" y2="452" stroke="var(--accent)" stroke-width="3"/>
+  <rect x="80" y="20" width="860" height="52" rx="4" fill="var(--paper)" stroke="var(--line)"/>
+  <text x="98" y="44" class="h" font-size="15">L4 Games</text>
+  <text x="98" y="62" font-size="12">Cleanup · Care · Story · Salon · Adventure · Kitchen · Dance · Flusier · Town</text>
+  <rect x="80" y="84" width="860" height="56" rx="4" fill="var(--paper)" stroke="var(--line)" stroke-dasharray="5 4"/>
+  <text x="98" y="108" class="h" font-size="15">L3 Scene data and content packs</text>
+  <text x="98" y="128" font-size="12">SceneDef files · art · voice keys · songs · recipes · client friends · progression tables · save schema extension</text>
+  <rect x="80" y="152" width="860" height="56" rx="4" fill="var(--tint-a1)" stroke="var(--a1)" stroke-width="2"/>
+  <text x="98" y="176" class="h" font-size="15">Game-specific modules</text>
+  <text x="98" y="196" font-size="12">Hub shape · need timer · beat clock · recipe table · chapter sequencer · star gates · home layout · new templates (x_*)</text>
+  <rect x="80" y="224" width="860" height="70" rx="4" fill="var(--tint-accent)" stroke="var(--accent)" stroke-width="2"/>
+  <text x="98" y="248" class="h" font-size="15">L2 Template library (quiqui_core)</text>
+  <text x="98" y="268" font-size="12">wave 1: 13 templates · wave 2: 5 · wave 3: 9 · plus t_rhythm_pose</text>
+  <text x="98" y="284" class="m" font-size="10.5">t20_drag_snap · t23_erase · t25_map · t45_dress_decorate · t22_play_beat · ...</text>
+  <rect x="80" y="306" width="860" height="64" rx="4" fill="var(--tint-accent)" stroke="var(--accent)"/>
+  <text x="98" y="330" class="h" font-size="15">L1 Primitives, modifiers, reactions, hint layer</text>
+  <text x="98" y="352" font-size="12">Give→Receive · Rub · Tap · Pan · Steer  |  Spawner · Pairs · Sequence  |  pose · sfx · voice · fx · swap · coins</text>
+  <rect x="80" y="382" width="860" height="70" rx="4" fill="var(--tint-mute)" stroke="var(--line)"/>
+  <text x="98" y="406" class="h" font-size="15">L0 Services and tooling (quiqui_core)</text>
+  <text x="98" y="426" font-size="12">Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable · ScenePlayer · StepRunner</text>
+  <text x="98" y="442" class="m" font-size="10.5">GUT harness · GeometryOracle · preflight gates · English-first ids · voice keys · art style rules</text>
+</svg></div>
+  <div class="tbl"><table><thead><tr><th>Area</th><th>Common, in the core</th><th>Specific, in each game</th></tr></thead><tbody><tr><td><b>Services</b></td><td>Log, ProgressManager (atomic save), AudioManager, SceneManager, Fsm</td><td>Save schema gets a game section. Same save file rules.</td></tr><tr><td><b>Scene player</b></td><td>ScenePlayer, StepRunner, SceneDef and StepDef resources</td><td>None. Games only write data.</td></tr><tr><td><b>Gestures</b></td><td>Give→Receive, Rub, Tap, Pan, Steer and the three modifiers</td><td>None. A new gesture goes to the core, not to a game.</td></tr><tr><td><b>Templates</b></td><td>All 28 buildable Builder templates, in three waves</td><td>New templates start as x_* in one game. They move to the core once a second game needs them.</td></tr><tr><td><b>Character</b></td><td>QuiQuiRig and the reaction vocabulary</td><td>Each game adds its own poses and friends.</td></tr><tr><td><b>Teaching</b></td><td>Ghost hand, gentle miss, hint queue</td><td>None.</td></tr><tr><td><b>Language</b></td><td>English ids, voice by key, locale folders</td><td>Each game records its own voice lines.</td></tr><tr><td><b>Quality</b></td><td>GUT, TouchSim, GeometryOracle, preflight gates, size bars</td><td>Each game adds scene-level tests on its own data.</td></tr><tr><td><b>Content</b></td><td>Art style rules in DESIGN.md</td><td>Backgrounds, props, friends, songs, recipes. All per game.</td></tr><tr><td><b>Hub and progression</b></td><td>The star and coin counters</td><td>The hub shape (home, salon floor, house map, world map, town map) and what stars unlock.</td></tr></tbody></table></div>
+</section>
+<section>
+  <span class="eyebrow">Diagram 3 · Reuse</span>
+  <h2>Which template each game uses</h2>
+  <p>Built from each game's scene list. A template used by many games is paid for once and earns back every time. The wave-1 templates carry most of the line.</p>
+  <div class="tbl"><table style="min-width:840px"><thead><tr><th>Template</th><th title="QuiQui Cleanup">cleanup</th><th title="QuiQui Care">care</th><th title="QuiQui Story">story</th><th title="QuiQui Salon">salon</th><th title="QuiQui Adventure">adventure</th><th title="QuiQui Kitchen">kitchen</th><th title="QuiQui Dance">dance</th><th title="QuiQui Flusier">flusier</th><th title="QuiQui Town">town</th><th>Games</th></tr></thead><tbody><tr class="grp"><td colspan="11">Wave 1</td></tr><tr><td class="id">t0_title</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"><b>9</b></td></tr><tr><td class="id">t3_skip_beat</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>0</b></td></tr><tr><td class="id">t20_drag_snap</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"><b>4</b></td></tr><tr><td class="id">t21_touch_each</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c"><b>5</b></td></tr><tr><td class="id">t22_play_beat</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c"><b>6</b></td></tr><tr><td class="id">t23_erase</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>4</b></td></tr><tr><td class="id">t25_map</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c"><b>7</b></td></tr><tr><td class="id">t32_reward</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"><b>9</b></td></tr><tr><td class="id">t34_rub_reveal</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>2</b></td></tr><tr><td class="id">t40_draw_fill</td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"><b>3</b></td></tr><tr><td class="id">t45_dress_decorate</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"><b>7</b></td></tr><tr><td class="id">t50_lanes</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"><b>2</b></td></tr><tr><td class="id">t51_prize_pick</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c"><b>6</b></td></tr><tr class="grp"><td colspan="11">Wave 2</td></tr><tr><td class="id">t43_color_fill</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t44_paint</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t55_find</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>3</b></td></tr><tr><td class="id">t27_memory</td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>2</b></td></tr><tr><td class="id">t38_peekaboo</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr class="grp"><td colspan="11">Wave 3</td></tr><tr><td class="id">t26_ride</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t37_tap_moving</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t41_float_pop</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t42_slice_cut</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t46_cups</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t48_serve</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">t52_groom</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>0</b></td></tr><tr><td class="id">t53_outro</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>0</b></td></tr><tr><td class="id">t49_progress_holder</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>0</b></td></tr><tr class="grp"><td colspan="11">Not in the Builder</td></tr><tr><td class="id">t_rhythm_pose</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">x_stack_cook</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"><b>1</b></td></tr><tr><td class="id">x_walk</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"><b>1</b></td></tr><tr><td class="id">x_hatch</td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c"></td><td class="c">●</td><td class="c"></td><td class="c"><b>1</b></td></tr></tbody></table></div>
+  <p class="cap">Never used by any of the nine in their first version: <span class="mono">t3_skip_beat, t52_groom, t53_outro, t49_progress_holder</span>. They stay in the library plan, but nothing in the line forces them yet. <span class="mono">t_rhythm_pose</span> is already in scope for the duck dance. <span class="mono">x_stack_cook</span>, <span class="mono">x_walk</span> and <span class="mono">x_hatch</span> are new and need their own scope.</p>
+</section>
+<section>
+  <span class="eyebrow">Diagram 4 · Repositories</span>
+  <h2>One repository per game, plus a core</h2>
+  <p>Decided on 2026-11-09. The local folders mirror GitHub, so each repository is one folder next to the others.</p>
+  <pre>~/Developer/                      mirrors github.com/danielvm-git, one folder per repo
+  big-quiqui-cleanup/            game 1. A new repository with its own specs. The core starts here
+    game/addons/quiqui_core/     isolated module. Core code may not reference game code
+    specs/product/GAME_PLAN.html plan for the game
+    specs/product/LINE_PLAN.html this general plan, canonical copy
+  big-quiqui-core/               created when Care starts: the addon extracted with git subtree split, plus shared tooling
+    addons/quiqui_core/
+    VERSION                      tagged releases, v1.0.0 and up
+  big-quiqui-care/               game 2. A new repository that consumes the core as a git submodule
+    game/addons/quiqui_core/     git submodule, pinned to a core tag
+  big-quiqui-story/ -salon/ -adventure/ -kitchen/ -dance/ -flusier/ -town/    games 3 to 9, created when their turn comes
+
+frozen reference: big-quiqui-v2 (the e12 and e13 prototype and the 17 old rooms)
+not part of the line: big-quiqui (v1), big-quiqui-fable (reboot), big-quiqui-retro (MakeCode demake)</pre>
+  <ul class="rules">
+    <li><b>The core is born inside Cleanup</b><span>Do not design a shared library first. The simplest game builds the player and the wave-1 templates, with a hard boundary: core code may not reference game code.</span></li>
+    <li><b>Extract when Care starts</b><span>The addon moves to <span class="mono">big-quiqui-core</span> with its history kept (<span class="mono">git subtree split</span>). Two real users shape the interface better than one.</span></li>
+    <li><b>Each game pins a core tag</b><span>Games consume the core as a git submodule at <span class="mono">game/addons/quiqui_core</span>. A fix in the core reaches a game only when it upgrades, so shipped games stay stable. The central CI must check out submodules. That is not verified yet.</span></li>
+    <li><b>New templates start inside one game</b><span>An <span class="mono">x_*</span> template lives in its game and moves to the core when a second game needs it.</span></li>
+    <li><b>Why not one repository</b><span>The release tool and the central CI work per repository with one tag format and one version ladder. Nine apps in one repository would need tags per path.</span></li>
+    <li><b>Repositories are created late</b><span>A game's repository is created when the game starts. Until then its folder holds only its plan page.</span></li>
+  </ul>
+</section>
+<section>
+  <span class="eyebrow">Diagram 5 · Build order</span>
+  <h2>Order of the nine games</h2>
+  <p>From the simplest game to the most complex. Confirmed by the project owner on 2026-11-09. The table shows what each game adds on top of the core.</p>
+  <div class="order"><div class="step"><span class="k">1</span><b>QuiQui Cleanup</b><span class="w">Simplest: 7 wave-1 templates, nothing new. Starts the repository and the core boundary.</span></div><div class="step"><span class="k">2</span><b>QuiQui Care</b><span class="w">Wave 1 only, plus a need timer. Starting it extracts the core into big-quiqui-core.</span></div><div class="step"><span class="k">3</span><b>QuiQui Story</b><span class="w">Adds two wave-2 templates and the narration pipeline.</span></div><div class="step"><span class="k">4</span><b>QuiQui Salon</b><span class="w">Adds paint and color templates, a photo album and the client cast.</span></div><div class="step"><span class="k">5</span><b>QuiQui Adventure</b><span class="w">Seven wave 2 and 3 templates with no-fail rules. No new engine.</span></div><div class="step"><span class="k">6</span><b>QuiQui Kitchen</b><span class="w">First new template (stack and cook), plus recipe data.</span></div><div class="step"><span class="k">7</span><b>QuiQui Dance</b><span class="w">A rhythm engine with audio timing. Not in the TutoTOONS Builder.</span></div><div class="step"><span class="k">8</span><b>QuiQui Flusier</b><span class="w">A hatch template, a light multi-pet rig and a collection save.</span></div><div class="step"><span class="k">9</span><b>QuiQui Town</b><span class="w">A walking world, a saved home layout and area unlocks. The largest.</span></div></div>
+  <div class="tbl"><table style="min-width:760px"><thead><tr><th>#</th><th>Game</th><th>Templates</th><th>New templates</th><th>Wave 2 and 3</th><th>Own modules</th><th>What it adds</th></tr></thead><tbody><tr><td class="c"><b>1</b></td><td><b>QuiQui Cleanup</b></td><td class="c">7</td><td class="c">0</td><td class="c">0</td><td class="c">3</td><td>Simplest: 7 wave-1 templates, nothing new. Starts the repository and the core boundary.</td></tr><tr><td class="c"><b>2</b></td><td><b>QuiQui Care</b></td><td class="c">10</td><td class="c">0</td><td class="c">0</td><td class="c">3</td><td>Wave 1 only, plus a need timer. Starting it extracts the core into big-quiqui-core.</td></tr><tr><td class="c"><b>3</b></td><td><b>QuiQui Story</b></td><td class="c">11</td><td class="c">0</td><td class="c">2</td><td class="c">3</td><td>Adds two wave-2 templates and the narration pipeline.</td></tr><tr><td class="c"><b>4</b></td><td><b>QuiQui Salon</b></td><td class="c">9</td><td class="c">0</td><td class="c">2</td><td class="c">5</td><td>Adds paint and color templates, a photo album and the client cast.</td></tr><tr><td class="c"><b>5</b></td><td><b>QuiQui Adventure</b></td><td class="c">12</td><td class="c">0</td><td class="c">7</td><td class="c">4</td><td>Seven wave 2 and 3 templates with no-fail rules. No new engine.</td></tr><tr><td class="c"><b>6</b></td><td><b>QuiQui Kitchen</b></td><td class="c">10</td><td class="c">1</td><td class="c">3</td><td class="c">4</td><td>First new template (stack and cook), plus recipe data.</td></tr><tr><td class="c"><b>7</b></td><td><b>QuiQui Dance</b></td><td class="c">6</td><td class="c">1</td><td class="c">0</td><td class="c">5</td><td>A rhythm engine with audio timing. Not in the TutoTOONS Builder.</td></tr><tr><td class="c"><b>8</b></td><td><b>QuiQui Flusier</b></td><td class="c">9</td><td class="c">1</td><td class="c">0</td><td class="c">5</td><td>A hatch template, a light multi-pet rig and a collection save.</td></tr><tr><td class="c"><b>9</b></td><td><b>QuiQui Town</b></td><td class="c">8</td><td class="c">1</td><td class="c">0</td><td class="c">4</td><td>A walking world, a saved home layout and area unlocks. The largest.</td></tr></tbody></table></div><p class="cap">The rule: sort by new templates, then wave 2 and 3 templates, then own modules, then templates used. Three calls are judgment, not count. Adventure comes before Kitchen, because its seven library templates have evidence and need no new engine, while Kitchen needs a new template with the weakest evidence. Kitchen comes before Dance, Flusier and Town, because its new piece is a plain drag-and-order step, while those three each add an engine-sized piece: audio timing, a multi-pet rig with a collection save, and a walking world with a saved layout. Dance comes before Flusier, because the rhythm engine stays inside three scenes, while Flusier touches the rig, the save and the templates. Town is last: the walking world plus a saved layout is the largest piece in the line.</p>
+</section>
+<section>
+  <span class="eyebrow">Rules for every game</span>
+  <h2>The same charter, nine times</h2>
+  <ul class="rules">
+    <li><b>Ages 4 to 7</b><span>No reading needed. Every prompt is a picture plus a voice or sound.</span></li>
+    <li><b>Offline, no ads, no telemetry</b><span>No network call in any game. Nothing leaves the device.</span></li>
+    <li><b>No punishment</b><span>No lives, no game over, no timer that ends a step. A miss returns the item.</span></li>
+    <li><b>Family voice</b><span>Voice is recorded by the family in PT-BR first. Locales are folders, not code.</span></li>
+    <li><b>English ids</b><span>Code, data keys and file names are English. Only voice and parent-area text are translated.</span></li>
+    <li><b>Same art style</b><span>Glossy, candy-colored, no pure-black outlines. One style guide across the line.</span></li>
+  </ul>
+</section>
+<section>
+  <span class="eyebrow">Decisions</span>
+  <h2>What is decided and what is open</h2>
+  <ul class="rules">
+    <li><b>Decided · build order</b><span>Cleanup, Care, Story, Salon, Adventure, Kitchen, Dance, Flusier, Town. From the simplest to the most complex, by the rule in the build order section.</span></li>
+    <li><b>Decided · a fresh start</b><span>A new repository per game, each with its own specs. <span class="mono">big-quiqui-v2</span> is frozen as the reference: its e12 and e13 work is the prototype of the player and the templates, and e14 to e16 are not continued there.</span></li>
+    <li><b>Decided · the 17 old rooms</b><span>They are not migrated inside big-quiqui-v2. Each game rebuilds the rooms it needs, as data, in its own repository. Care rebuilds the care rooms (about 11). Rooms such as vila, mercado, casinha and festa (Town), pinguim_jogo (Adventure) and pato_danca (Dance) come with those games.</span></li>
+    <li><b>Decided · nine apps</b><span>Separate apps, no launcher.</span></li>
+    <li><b>Decided · progress</b><span>Coins and stars stay separate in each game.</span></li>
+    <li><b>Decided · repositories</b><span>One repository per game plus <span class="mono">big-quiqui-core</span>. The first repository is <span class="mono">big-quiqui-cleanup</span>, with the core as an isolated module. <span class="mono">big-quiqui-core</span> is created when Care starts.</span></li>
+    <li><b>Decided · big-quiqui-flusier</b><span>It is the ninth game: pets in rooms, in the style of Fluvsies. It shares the pet care and collect type with Care, but it is Form C. Its name follows the folder and can change.</span></li>
+  </ul>
+</section>
+<section><span class="eyebrow">The nine plans</span><h2>Plan for each game</h2></section>
+<section class="gamesection" id="game-cleanup"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 1 of 9 · Cleanup &amp; chores · repo big-quiqui-cleanup</span>
+  <h2>QuiQui Cleanup</h2>
+  <p class="lede">A messy house. The child tidies room by room and watches it sparkle. <strong>&quot;I fixed the mess.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Sweet Baby Girl Cleanup 5 <span class="chip fa">Form A</span></h3>
+    <div class="facts"><span><b>157 MB</b> download</span><span><b>51</b> own types</span><span><b>180 scenes</b></span></div>
+    <p style="margin-top:10px">A pure cleaning game on the Builder. Its mix is touch-each, erase and drag.</p>
+    <h4 style="margin-top:10px">Scene mix, percent of template scenes</h4><div class="bars"><div class="bar"><span>touch each</span><i style="width:100%"></i><span>26%</span></div><div class="bar"><span>story beats</span><i style="width:100%"></i><span>26%</span></div><div class="bar"><span>erase</span><i style="width:58%"></i><span>15%</span></div><div class="bar"><span>draw</span><i style="width:38%"></i><span>10%</span></div><div class="bar"><span>drag</span><i style="width:35%"></i><span>9%</span></div><div class="bar"><span>dress-up</span><i style="width:23%"></i><span>6%</span></div><div class="bar"><span>map</span><i style="width:19%"></i><span>5%</span></div><div class="bar"><span>rub-reveal</span><i style="width:12%"></i><span>3%</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>Dirt as layers to erase, objects to put away, and the room as the unit of progress. Cleanup 6 confirms the same mix.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Interstitial ad scenes and the in-game store.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Cleanup 6 (155 template scenes, 65 own types).</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>10</b> scenes in the first version (proposed)</span><span><b>7</b> templates: 7 wave 1, 0 wave 2, 0 wave 3</span><span>build order <b>1</b></span></div>
+<h3 id="scenes-cleanup">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">house_map</td><td><span class="chip w1">t25_map</span></td><td>Pick a room. Dirty rooms show a cloud, clean rooms sparkle.</td></tr><tr><td class="id">living_room</td><td><span class="chip w1">t23_erase</span></td><td>Wipe dust and stains with a cloth.</td></tr><tr><td class="id">toy_box</td><td><span class="chip w1">t20_drag_snap</span></td><td>Drag toys into the box.</td></tr><tr><td class="id">windows_lights</td><td><span class="chip w1">t21_touch_each</span></td><td>Open the curtains, switch the lights, pop the dust bunnies.</td></tr><tr><td class="id">kitchen_dishes</td><td><span class="chip w1">t20_drag_snap</span></td><td>Drag dishes to the rack, then scrub them.</td></tr><tr><td class="id">garden_leaves</td><td><span class="chip w1">t21_touch_each</span></td><td>Touch each pile of leaves to sweep it.</td></tr><tr><td class="id">bathroom_tidy</td><td><span class="chip w1">t23_erase</span></td><td>Wipe the mirror and the tub.</td></tr><tr><td class="id">before_after</td><td><span class="chip w1">t34_rub_reveal</span></td><td>Rub to reveal the clean room.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>Coins fly. The house is clean.</td></tr></tbody></table></div>
+<h3 id="arch-cleanup">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Cleanup</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>10 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w1">t23_erase</span><span class="chip w1">t20_drag_snap</span><span class="chip w1">t21_touch_each</span><span class="chip w1">t34_rub_reveal</span><span class="chip w1">t32_reward</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Rub · Give→Receive + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-cleanup">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Dirt layers</b></td><td>Three levels of dirt art per surface, removed one by one.</td><td class="dim">EraseLayer in 131 of 131 erase scenes</td></tr><tr><td><b>Room meter</b></td><td>A row of dots that fill as the room gets clean.</td><td class="dim">care_dots_bar pattern (exists)</td></tr><tr><td><b>Helper characters</b></td><td>QuiQui and a friend who cheer on each step.</td><td class="dim">Sweet Baby Girl titles</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>5 rooms, each with 2 dirt levels and about 8 objects.</li><li>Cloth, sponge, broom, duster as tools.</li><li>Voice for each room: a short &quot;what a mess&quot; and a &quot;so clean&quot; line.</li></ul></li>
+    <li><b>Progression</b><span>Each clean room is a star. Five stars open the next house.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Only wave-1 templates are needed, so this is the cheapest game. The risk is repetition: vary the gesture per room.</li></ul></li>
+    <li><b>First playable slice</b><span>Living room: erase the dust and put the toys away. Done when a child cleans the room without help and asks to play again. This is also the first slice of the whole line.</span><span class="dim" style="margin-top:6px">First game built. It starts the new repository and the core boundary inside it (addons/quiqui_core). It needs no new template, so it proves the player and the wave-1 templates with the least risk.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-care"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 2 of 9 · Pet &amp; baby care, collect · repo big-quiqui-care</span>
+  <h2>QuiQui Care</h2>
+  <p class="lede">Take care of QuiQui through her day: feed, wash, dress, play, sleep. <strong>&quot;QuiQui needs me, and when I help she is happy.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Giggle Babies <span class="chip fb">Form B</span></h3>
+    <div class="facts"><span><b>175 MB</b> download</span><span><b>1,959</b> own types</span><span><b>13 files</b></span></div>
+    <p style="margin-top:10px">Closest care loop: feeding, bath and teeth activities, a hunger timer with quarter and half milestones, and a character state machine.</p>
+    <h4 style="margin-top:10px">Related type names by theme</h4><div class="bars"><div class="bar"><span>collect</span><i style="width:100%"></i><span>63</span></div><div class="bar"><span>makeover</span><i style="width:89%"></i><span>56</span></div><div class="bar"><span>movement</span><i style="width:81%"></i><span>51</span></div><div class="bar"><span>care</span><i style="width:67%"></i><span>42</span></div><div class="bar"><span>kitchen</span><i style="width:63%"></i><span>40</span></div><div class="bar"><span>world</span><i style="width:46%"></i><span>29</span></div><div class="bar"><span>garden</span><i style="width:13%"></i><span>8</span></div><div class="bar"><span>music</span><i style="width:8%"></i><span>5</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>The need escalation (HungerTimer.ReachedQuarter / ReachedHalf) and the idea that food maps to a reaction by data. Our FSM stays table-driven.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>28 per-state classes and the gardening side loop. Form B costs about 2,000 own types, which is the price of that depth.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>My Baby Unicorn (Form A) shows the same care steps as plain scenes.</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>11</b> scenes in the first version (proposed)</span><span><b>10</b> templates: 10 wave 1, 0 wave 2, 0 wave 3</span><span>build order <b>2</b></span></div>
+<h3 id="scenes-care">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap the big play button.</td></tr><tr><td class="id">home</td><td><span class="chip w1">t25_map</span></td><td>Doors to every room. The wish bubble shows what QuiQui needs next.</td></tr><tr><td class="id">kitchen</td><td><span class="chip w1">t20_drag_snap</span></td><td>Drag food to her mouth. She chews and laughs.</td></tr><tr><td class="id">bathroom_soap</td><td><span class="chip w1">t40_draw_fill</span></td><td>Rub the sponge to cover her in foam.</td></tr><tr><td class="id">bathroom_rinse</td><td><span class="chip w1">t23_erase</span></td><td>The shower rinses the foam, the towel dries her.</td></tr><tr><td class="id">closet</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Pick clothes from the scrolling rail.</td></tr><tr><td class="id">garden_play</td><td><span class="chip w1">t21_touch_each</span></td><td>Touch each toy or flower. Each one answers.</td></tr><tr><td class="id">bedroom</td><td><span class="chip w1">t21_touch_each</span></td><td>Switch off the lamp, pull up the blanket.</td></tr><tr><td class="id">goodnight</td><td><span class="chip w1">t22_play_beat</span></td><td>A short goodnight beat with the family voice.</td></tr><tr><td class="id">celebration</td><td><span class="chip w1">t32_reward</span></td><td>Coins fly into the counter and QuiQui dances.</td></tr><tr><td class="id">prize_wheel</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick one of three gifts.</td></tr></tbody></table></div>
+<h3 id="arch-care">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Care</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>11 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w1">t20_drag_snap</span><span class="chip w1">t40_draw_fill</span><span class="chip w1">t23_erase</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t21_touch_each</span><span class="chip w1">t22_play_beat</span><span class="chip w1">t32_reward</span><span class="chip w1">t51_prize_pick</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Give→Receive · Rub + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-care">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Care need timer</b></td><td>A need that grows in three visible steps (quarter, half, full) before its room opens. Never blocks the child.</td><td class="dim">HungerTimer.ReachedQuarter / ReachedHalf (Giggle Babies)</td></tr><tr><td><b>Care loop</b></td><td>The existing FEED, BATH, DRESS, PLAY, SLEEP, CELEBRATE machine, now driving which door glows.</td><td class="dim">CareLoopManager (exists)</td></tr><tr><td><b>Progress dots</b></td><td>Five dots on the home screen that fill as the day goes.</td><td class="dim">care_dots_bar (exists)</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Reuse the existing hero rig (18 poses), about 30 item images and 35 audio files, renamed to English ids.</li><li>About 6 accessories and 9 foods already exist. Add voice lines for each need.</li></ul></li>
+    <li><b>Progression</b><span>Each completed care step credits stars and coins. A full day unlocks the prize wheel.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>The need timer can feel like pressure. It only changes the bubble, never ends a step.</li><li>This is the game that extracts the core, so the core interface must be stable before it starts.</li></ul></li>
+    <li><b>First playable slice</b><span>The kitchen: feed QuiQui three times, on the player already proved by Cleanup.</span><span class="dim" style="margin-top:6px">Second game built. Starting it extracts the core into big-quiqui-core. It rebuilds the care rooms as data. The 17 rooms of big-quiqui-v2 are not migrated there.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-story"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 3 of 9 · Story &amp; daily routine · repo big-quiqui-story</span>
+  <h2>QuiQui Story</h2>
+  <p class="lede">A day with QuiQui, told in voice and pictures, with small tasks inside each chapter. <strong>&quot;I helped tell the story.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Sweet Baby Girl Mermaid Life <span class="chip fa">Form A</span></h3>
+    <div class="facts"><span><b>102 MB</b> download</span><span><b>9</b> own types</span><span><b>105 scenes</b></span></div>
+    <p style="margin-top:10px">A routine told through small tasks. 9 own types, so almost everything is scene data. Mix: touch-each and story beats lead.</p>
+    <h4 style="margin-top:10px">Scene mix, percent of template scenes</h4><div class="bars"><div class="bar"><span>touch each</span><i style="width:100%"></i><span>25%</span></div><div class="bar"><span>story beats</span><i style="width:76%"></i><span>19%</span></div><div class="bar"><span>drag</span><i style="width:68%"></i><span>17%</span></div><div class="bar"><span>draw</span><i style="width:40%"></i><span>10%</span></div><div class="bar"><span>ads</span><i style="width:24%"></i><span>6%</span></div><div class="bar"><span>map</span><i style="width:24%"></i><span>6%</span></div><div class="bar"><span>dress-up</span><i style="width:20%"></i><span>5%</span></div><div class="bar"><span>paint</span><i style="width:16%"></i><span>4%</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>A story as a chain of short scenes using touch-each, drag and story beats.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Interstitial ad scenes.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Summer Camp (75 scenes) and Power Girls Super City (153) as other examples of the same shape.</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>12</b> scenes in the first version (proposed)</span><span><b>11</b> templates: 9 wave 1, 2 wave 2, 0 wave 3</span><span>build order <b>3</b></span></div>
+<h3 id="scenes-story">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">shelf</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick a story cover.</td></tr><tr><td class="id">wake_up</td><td><span class="chip w1">t22_play_beat</span></td><td>QuiQui wakes up. The family voice narrates.</td></tr><tr><td class="id">brush_teeth</td><td><span class="chip w1">t23_erase</span></td><td>Brush the teeth clean.</td></tr><tr><td class="id">pick_outfit</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Choose today&#x27;s outfit.</td></tr><tr><td class="id">breakfast</td><td><span class="chip w1">t20_drag_snap</span></td><td>Put food on the plate.</td></tr><tr><td class="id">to_the_park</td><td><span class="chip w1">t25_map</span></td><td>Walk to the park.</td></tr><tr><td class="id">find_friends</td><td><span class="chip w2">t55_find</span></td><td>The voice asks where a friend is. Tap it.</td></tr><tr><td class="id">memory</td><td><span class="chip w2">t27_memory</span></td><td>Match the picnic cards.</td></tr><tr><td class="id">picnic</td><td><span class="chip w1">t21_touch_each</span></td><td>Touch each picnic item.</td></tr><tr><td class="id">bedtime</td><td><span class="chip w1">t22_play_beat</span></td><td>Goodnight. The screen dims.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>A star for the chapter.</td></tr></tbody></table></div>
+<h3 id="arch-story">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Story</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>12 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t51_prize_pick</span><span class="chip w1">t22_play_beat</span><span class="chip w1">t23_erase</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t20_drag_snap</span><span class="chip w1">t25_map</span><span class="chip w2">t55_find</span><span class="chip w2">t27_memory</span><span class="chip w1">t21_touch_each</span><span class="chip w1">t32_reward</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Rub · Give→Receive · Pan + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-story">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Chapter sequencer</b></td><td>A story is an ordered list of scenes with a bookmark, so a child can stop and resume.</td><td class="dim">new, small</td></tr><tr><td><b>Narration timeline</b></td><td>Voice lines cued to pictures, so no text is ever needed.</td><td class="dim">family voice, PT-BR first</td></tr><tr><td><b>Family narrator kit</b></td><td>A small tool so a parent can record the narration for a story.</td><td class="dim">family voice rule in CLAUDE.md</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>One story of 12 scenes to start. Each chapter reuses props.</li><li>Full narration recorded by the family.</li></ul></li>
+    <li><b>Progression</b><span>Finishing a chapter unlocks the next one.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Narration is the content. Without recorded voice the game is empty.</li><li>Wave-2 templates (find, memory) must exist.</li></ul></li>
+    <li><b>First playable slice</b><span>One chapter of 5 scenes with narration.</span><span class="dim" style="margin-top:6px">Third game. It adds two wave-2 templates and the narration pipeline.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-salon"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 4 of 9 · Salon &amp; makeover · repo big-quiqui-salon</span>
+  <h2>QuiQui Salon</h2>
+  <p class="lede">Animal friends visit the salon. The child washes, styles, colors and decorates, then takes a photo. <strong>&quot;I made my friend look beautiful.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Princess Gloria Makeup Salon <span class="chip fa">Form A</span></h3>
+    <div class="facts"><span><b>116 MB</b> download</span><span><b>7</b> own types</span><span><b>73 scenes</b></span></div>
+    <p style="margin-top:10px">Smallest complete game in the sample. Its scene mix is a makeover flow: draw, erase, paint, dress-up.</p>
+    <h4 style="margin-top:10px">Scene mix, percent of template scenes</h4><div class="bars"><div class="bar"><span>story beats</span><i style="width:100%"></i><span>27%</span></div><div class="bar"><span>draw</span><i style="width:74%"></i><span>20%</span></div><div class="bar"><span>erase</span><i style="width:67%"></i><span>18%</span></div><div class="bar"><span>paint</span><i style="width:63%"></i><span>17%</span></div><div class="bar"><span>dress-up</span><i style="width:30%"></i><span>8%</span></div><div class="bar"><span>map</span><i style="width:22%"></i><span>6%</span></div><div class="bar"><span>drag</span><i style="width:15%"></i><span>4%</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>The wash, color and accessory flow, and the way every scene is the same few templates with new art. Hair from Animal Hair Salon Australia (t52_groom, one scene with 50 strand objects).</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Anything that needs a store or subscription lock.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Animal Hair Salon 2 Jungle and Jungle Animal Hair Salon 2 for the salon theme at larger scale (133 and 251 scenes).</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>10</b> scenes in the first version (proposed)</span><span><b>9</b> templates: 7 wave 1, 2 wave 2, 0 wave 3</span><span>build order <b>4</b></span></div>
+<h3 id="scenes-salon">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">salon_floor</td><td><span class="chip w1">t25_map</span></td><td>Pick a station: wash, style, color, makeup, accessories, photo.</td></tr><tr><td class="id">client_arrives</td><td><span class="chip w1">t22_play_beat</span></td><td>A friend walks in and shows the look it wants, as a picture.</td></tr><tr><td class="id">wash</td><td><span class="chip w1">t40_draw_fill</span></td><td>Rub shampoo on the friend, then rinse it away.</td></tr><tr><td class="id">style</td><td><span class="chip w1">t34_rub_reveal</span></td><td>Pass the comb or brush over the fur and it changes shape.</td></tr><tr><td class="id">color</td><td><span class="chip w2">t44_paint</span></td><td>Paint fur or nails with palette colors.</td></tr><tr><td class="id">makeup</td><td><span class="chip w2">t43_color_fill</span></td><td>Fill areas with colors.</td></tr><tr><td class="id">accessories</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Pick hats, glasses, bows.</td></tr><tr><td class="id">photo_booth</td><td><span class="chip w1">t22_play_beat</span></td><td>The friend poses. Tap to take the photo.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>Coins and a new friend arrives.</td></tr></tbody></table></div>
+<h3 id="arch-salon">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Salon</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>10 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w1">t22_play_beat</span><span class="chip w1">t40_draw_fill</span><span class="chip w1">t34_rub_reveal</span><span class="chip w2">t44_paint</span><span class="chip w2">t43_color_fill</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t32_reward</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Rub · Give→Receive + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-salon">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Client friends</b></td><td>A cast of animal friends, one per visit, each with a look card made only of pictures.</td><td class="dim">Princess Gloria and the salon titles</td></tr><tr><td><b>Look compare</b></td><td>Before and after side by side, so the child sees what changed.</td><td class="dim">new, simple</td></tr><tr><td><b>Photo album</b></td><td>Saves the result on the device. No sharing.</td><td class="dim">PhotoGallery: TakePhoto, SaveToFile, LoadPhotos (13 of 24 titles)</td></tr><tr><td><b>Tool unlock</b></td><td>Some tools cost coins earned in play.</td><td class="dim">ToolLock (13 of 24 titles)</td></tr><tr><td><b>Hair strands</b></td><td>Combing and drying individual strands. Comes in wave 3 as t52_groom.</td><td class="dim">Template52Layer (50 strand objects in one scene)</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>6 animal friends with a few hair or fur states each.</li><li>About 12 hair and fur colors, 15 accessories, 8 tools.</li><li>Voice lines for each friend and each station.</li></ul></li>
+    <li><b>Progression</b><span>Each friend visit gives a look and a photo. Tools and accessories unlock with coins.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Hair strands are expensive. Ship with t34_rub_reveal first and add t52_groom later.</li><li>The photo album writes files, so it needs the save-path rules.</li></ul></li>
+    <li><b>First playable slice</b><span>One friend, three stations: wash, color, accessories.</span><span class="dim" style="margin-top:6px">Fourth game. It adds the paint and color templates, a photo album and the client cast.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-adventure"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 5 of 9 · Adventure &amp; movement · repo big-quiqui-adventure</span>
+  <h2>QuiQui Adventure</h2>
+  <p class="lede">QuiQui explores a map and plays small movement games. Every game ends well. <strong>&quot;I helped QuiQui reach the treasure.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">My Baby Unicorn <span class="chip fa">Form A</span></h3>
+    <div class="facts"><span><b>132 MB</b> download</span><span><b>14</b> own types</span><span><b>189 scenes</b></span></div>
+    <p style="margin-top:10px">Widest minigame set in the Builder family: ride, tap-moving, lanes, memory, paint. Movement is 8% of its scenes. Pop Stars adds lanes (11% movement).</p>
+    <h4 style="margin-top:10px">Scene mix, percent of template scenes</h4><div class="bars"><div class="bar"><span>story beats</span><i style="width:100%"></i><span>40%</span></div><div class="bar"><span>touch each</span><i style="width:52%"></i><span>21%</span></div><div class="bar"><span>drag</span><i style="width:28%"></i><span>11%</span></div><div class="bar"><span>movement</span><i style="width:20%"></i><span>8%</span></div><div class="bar"><span>map</span><i style="width:15%"></i><span>6%</span></div><div class="bar"><span>paint</span><i style="width:12%"></i><span>5%</span></div><div class="bar"><span>dress-up</span><i style="width:12%"></i><span>5%</span></div><div class="bar"><span>tap games</span><i style="width:8%"></i><span>3%</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>Map with scenes, ride, tap-moving, lanes, memory. The map and minigame mix, not the fail states.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Lives, shooting, crashing, screen shake.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Princesses (Form C) has Runner and JumperV3 modules at much larger scale (1,636 own types).</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>12</b> scenes in the first version (proposed)</span><span><b>12</b> templates: 5 wave 1, 3 wave 2, 4 wave 3</span><span>build order <b>5</b></span></div>
+<h3 id="scenes-adventure">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">world_map</td><td><span class="chip w1">t25_map</span></td><td>Scroll the world. A friend follows QuiQui.</td></tr><tr><td class="id">forest_ride</td><td><span class="chip w3">t26_ride</span></td><td>Steer QuiQui along the path and collect stars.</td></tr><tr><td class="id">river_lanes</td><td><span class="chip w1">t50_lanes</span></td><td>Switch lanes to collect fruit.</td></tr><tr><td class="id">bubble_pop</td><td><span class="chip w3">t41_float_pop</span></td><td>Pop floating bubbles.</td></tr><tr><td class="id">fruit_catch</td><td><span class="chip w3">t37_tap_moving</span></td><td>Tap moving fruit before it floats away. Nothing is lost.</td></tr><tr><td class="id">peekaboo_bushes</td><td><span class="chip w2">t38_peekaboo</span></td><td>Friends peek out of the bushes. Tap for a giggle.</td></tr><tr><td class="id">treasure_find</td><td><span class="chip w2">t55_find</span></td><td>Find the treasure the voice describes.</td></tr><tr><td class="id">memory_cave</td><td><span class="chip w2">t27_memory</span></td><td>Match the cave cards.</td></tr><tr><td class="id">shell_game</td><td><span class="chip w3">t46_cups</span></td><td>Find the pearl under the shells. It is always there.</td></tr><tr><td class="id">campfire</td><td><span class="chip w1">t32_reward</span></td><td>Coins and a new map area.</td></tr><tr><td class="id">prize</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick a trophy.</td></tr></tbody></table></div>
+<h3 id="arch-adventure">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Adventure</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>12 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w3">t26_ride</span><span class="chip w1">t50_lanes</span><span class="chip w3">t41_float_pop</span><span class="chip w3">t37_tap_moving</span><span class="chip w2">t38_peekaboo</span><span class="chip w2">t55_find</span><span class="chip w2">t27_memory</span><span class="chip w3">t46_cups</span><span class="chip w1">t32_reward</span><span class="chip w1">t51_prize_pick</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Steer + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-adventure">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Steer</b></td><td>Move a character freely or between lanes.</td><td class="dim">Template26Player, Template50Player</td></tr><tr><td><b>Spawner</b></td><td>Makes objects appear and move.</td><td class="dim">Template26/37/38/41/46/50 road and mole objects</td></tr><tr><td><b>Star gates</b></td><td>Map areas open with stars. A game can never be failed.</td><td class="dim">our rule</td></tr><tr><td><b>Companion follower</b></td><td>A friend that walks behind QuiQui on the map.</td><td class="dim">FollowersFollow in Template25</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>3 worlds (forest, river, cave) with 3 minigames each.</li><li>Collectible stars and fruit.</li><li>Voice for each world.</li></ul></li>
+    <li><b>Progression</b><span>Stars open map areas. Each world has a trophy.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Every TutoTOONS movement template has a losing state. Each one needs an adaptation rule.</li><li>Free walking exists only in Form C, so keep movement on rails or lanes.</li></ul></li>
+    <li><b>First playable slice</b><span>Map plus one lane game (t50_lanes is already in wave 1).</span><span class="dim" style="margin-top:6px">Fifth game. Steer and Spawner already exist from wave 1 (decision D6). The work is seven templates with no-fail rules.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-kitchen"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 6 of 9 · Kitchen &amp; cooking · repo big-quiqui-kitchen</span>
+  <h2>QuiQui Kitchen</h2>
+  <p class="lede">Choose a recipe, find and prepare the food, cook it, and serve it to a friend. <strong>&quot;I made lunch for my friend.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Sweet Baby Girl Summer Camp + Smolsies My Cute Pet House <span class="chip fa">Form A + B</span></h3>
+    <div class="facts"><span><b>122 MB</b> download</span><span><b>8</b> own types</span><span><b>75 scenes</b></span></div>
+    <p style="margin-top:10px">No title in the sample is mainly a kitchen game. Summer Camp is the only Builder title with a serve scene and slicing scenes. Smolsies Cute Pet House has the cooking code.</p>
+    
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>Shell and scene flow from Summer Camp. Cooker logic from Smolsies (BaseCooker, CookParams). Food type, tier and reaction as data from Giggle Babies (KitchenFoodsData). Ingredient give and receive from Dopples.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Customers who leave if you are slow, and anything with a timer.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Dopples World has the biggest cooking vocabulary (74 related types: Cook, Recipe, Burger, Glaze, Bakery).</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>10</b> scenes in the first version (proposed)</span><span><b>10</b> templates: 6 wave 1, 1 wave 2, 2 wave 3, 1 new</span><span>build order <b>6</b></span></div>
+<h3 id="scenes-kitchen">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">recipe_pick</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick a dish from three pictures.</td></tr><tr><td class="id">market</td><td><span class="chip w2">t55_find</span></td><td>The voice asks for an ingredient. Tap it.</td></tr><tr><td class="id">wash</td><td><span class="chip w1">t23_erase</span></td><td>Wash the vegetables.</td></tr><tr><td class="id">chop</td><td><span class="chip w3">t42_slice_cut</span></td><td>Cut along the dotted line.</td></tr><tr><td class="id">mix</td><td><span class="chip wx">x_stack_cook</span></td><td>Stack ingredients in the bowl in order.</td></tr><tr><td class="id">cook</td><td><span class="chip w1">t22_play_beat</span></td><td>Tap the stove. The food changes from raw to cooked.</td></tr><tr><td class="id">decorate</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Add toppings to the dish.</td></tr><tr><td class="id">serve</td><td><span class="chip w3">t48_serve</span></td><td>A friend arrives and eats. It reacts to the taste.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>Coins and a new recipe.</td></tr></tbody></table></div>
+<h3 id="arch-kitchen">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Kitchen</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>10 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t51_prize_pick</span><span class="chip w2">t55_find</span><span class="chip w1">t23_erase</span><span class="chip w3">t42_slice_cut</span><span class="chip w1">t22_play_beat</span><span class="chip w1">t45_dress_decorate</span><span class="chip w3">t48_serve</span><span class="chip w1">t32_reward</span></span></div>
+  <div class="row"><span class="l">new here</span><span><span class="chip wx">x_stack_cook</span></span></div>
+  <div class="row"><span class="l">L1 core</span><span>Tap · Rub · Give→Receive + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-kitchen">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Recipe table</b></td><td>Each dish lists its ingredients, steps and the cooked picture.</td><td class="dim">Recipe, RecipeSO, CookParams</td></tr><tr><td><b>Food data</b></td><td>Each food has a type, a tier and a reaction, all as data.</td><td class="dim">KitchenFoodsData (Giggle Babies)</td></tr><tr><td><b>Stack and cook</b></td><td>A new template: stack items in order, then cook with a tap.</td><td class="dim">ActionIngredientProvide / Receive (Dopples)</td></tr><tr><td><b>Friend tastes</b></td><td>The friend likes or dislikes a food and shows it with a face only.</td><td class="dim">FoodTasteType (Fluvsies)</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>About 20 ingredients, 6 recipes, 4 friends with taste reactions.</li><li>Cooked-state pictures for every dish.</li><li>Sounds for chop, sizzle, serve.</li></ul></li>
+    <li><b>Progression</b><span>Each served dish unlocks a new recipe.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Weakest evidence of the eight. Only 2 scenes of the Builder sample use the serve template.</li><li>Stack and cook is a new template, so it needs its own scope and test.</li><li>Keep to safe, common foods and no text on allergens.</li></ul></li>
+    <li><b>First playable slice</b><span>One recipe end to end: market, chop, mix, cook, serve.</span><span class="dim" style="margin-top:6px">Sixth game. The first game that needs a new template (stack and cook).</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-dance"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 7 of 9 · Music &amp; dance · repo big-quiqui-dance</span>
+  <h2>QuiQui Dance</h2>
+  <p class="lede">Friends dance on a stage. The child taps to the beat and the stage lights up. <strong>&quot;I danced with my friends.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Kpopsies <span class="chip fb">Form B</span></h3>
+    <div class="facts"><span><b>162 MB</b> download</span><span><b>1,520</b> own types</span><span><b>14 files</b></span></div>
+    <p style="margin-top:10px">Has a dedicated dance minigame (the DancingMinigameV2 and DancingV4 namespaces). The Dancing modules are controller, input manager, level data and formations. Closest to a rhythm game.</p>
+    <h4 style="margin-top:10px">Related type names by theme</h4><div class="bars"><div class="bar"><span>makeover</span><i style="width:100%"></i><span>61</span></div><div class="bar"><span>music</span><i style="width:51%"></i><span>31</span></div><div class="bar"><span>movement</span><i style="width:51%"></i><span>31</span></div><div class="bar"><span>world</span><i style="width:46%"></i><span>28</span></div><div class="bar"><span>collect</span><i style="width:21%"></i><span>13</span></div><div class="bar"><span>care</span><i style="width:16%"></i><span>10</span></div><div class="bar"><span>garden</span><i style="width:5%"></i><span>3</span></div><div class="bar"><span>kitchen</span><i style="width:3%"></i><span>2</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>Level data as beats, formations of friends, correct-hit effects, and a dance floor that reacts.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Hatching, collecting and the rest of the Form B world. Form B is about 1,500 own types.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>L.O.L. Surprise Disco House (dancing and piano types) and Pop Stars as a small Form A candidate. Whether Pop Stars&#x27; lane game is rhythm is not confirmed.</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>8</b> scenes in the first version (proposed)</span><span><b>6</b> templates: 5 wave 1, 0 wave 2, 0 wave 3</span><span>build order <b>7</b></span></div>
+<h3 id="scenes-dance">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">stage_select</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick a song from three covers.</td></tr><tr><td class="id">practice</td><td><span class="chip w1">t22_play_beat</span></td><td>QuiQui shows the moves while the voice counts the beat.</td></tr><tr><td class="id">dance_easy</td><td><span class="chip we">t_rhythm_pose</span></td><td>Tap targets on the beat. Missing only dims the sparkle.</td></tr><tr><td class="id">dance_medium</td><td><span class="chip we">t_rhythm_pose</span></td><td>Same, with more friends.</td></tr><tr><td class="id">dance_show</td><td><span class="chip we">t_rhythm_pose</span></td><td>The whole band. Lights follow the music.</td></tr><tr><td class="id">costume</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Choose the stage outfit.</td></tr><tr><td class="id">spotlight</td><td><span class="chip w1">t32_reward</span></td><td>Applause and stars.</td></tr></tbody></table></div>
+<h3 id="arch-dance">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Dance</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>8 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t51_prize_pick</span><span class="chip w1">t22_play_beat</span><span class="chip we">t_rhythm_pose</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t32_reward</span></span></div>
+  
+  <div class="row"><span class="l">L1 core</span><span>Tap · Give→Receive + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-dance">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Beat clock</b></td><td>One clock driven by the music. Everything else syncs to it.</td><td class="dim">DancingInputManager, DanceGameController</td></tr><tr><td><b>Beat maps</b></td><td>Each song is a file: tempo and a list of beats.</td><td class="dim">DancingLevelData</td></tr><tr><td><b>Formations</b></td><td>Friends move into shapes as the song goes on.</td><td class="dim">DancingFormation</td></tr><tr><td><b>No-fail scoring</b></td><td>Stars come from taking part. A miss never ends the song.</td><td class="dim">our rule</td></tr><tr><td><b>Latency calibration</b></td><td>A one-time tap test to fit the iPad audio delay.</td><td class="dim">new</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>3 songs of about 60 seconds, original or family-made.</li><li>4 dancing friends and a stage.</li><li>Music rights must be clear. No licensed tracks.</li></ul></li>
+    <li><b>Progression</b><span>Each song gives stars. Stars unlock outfits and new songs.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Not in the Builder at all, so it needs a custom engine.</li><li>Audio timing on iPad must be measured, not assumed.</li><li>Needs original music.</li></ul></li>
+    <li><b>First playable slice</b><span>One song, one friend, tap on the beat.</span><span class="dim" style="margin-top:6px">Seventh game. It grows the existing duck dance (t_rhythm_pose) into a full rhythm template with audio timing.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-flusier"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 8 of 9 · Pet care &amp; collect, rooms · repo big-quiqui-flusier</span>
+  <h2>QuiQui Flusier</h2>
+  <p class="lede">A room full of small pets. The child hatches them, plays with toys, and fills the room. The name follows the folder and can change. <strong>&quot;These are my pets, and I take care of them.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Fluvsies <span class="chip fc">Form C</span></h3>
+    <div class="facts"><span><b>288 MB</b> download</span><span><b>4,351</b> own types</span><span><b>29 files + 25 packs</b></span></div>
+    <p style="margin-top:10px">A pet room platform: pets live in rooms, and each toy in a room is a small activity. It has eggs, per-pet needs, clothes collections, a flying minigame and 9 live events.</p>
+    <h4 style="margin-top:10px">Related type names by theme</h4><div class="bars"><div class="bar"><span>collect</span><i style="width:100%"></i><span>193</span></div><div class="bar"><span>makeover</span><i style="width:87%"></i><span>168</span></div><div class="bar"><span>world</span><i style="width:84%"></i><span>163</span></div><div class="bar"><span>movement</span><i style="width:55%"></i><span>107</span></div><div class="bar"><span>kitchen</span><i style="width:53%"></i><span>103</span></div><div class="bar"><span>care</span><i style="width:18%"></i><span>35</span></div><div class="bar"><span>garden</span><i style="width:17%"></i><span>33</span></div><div class="bar"><span>music</span><i style="width:4%"></i><span>7</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>Toy-as-activity stations, egg tables and hatching, clothes and pet collections, and the clean service split (state machine, event bus, input, saved-data repository).</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>The 9 live events tied to server time, the store, delivery packs, and anything online.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Smolsies 2 (Form B, 1,176 own types) has a hatching UI with pets at a smaller scale. Smolsies My Cute Pet House (Form B, 784) has pets, plants and cooking.</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>10</b> scenes in the first version (proposed)</span><span><b>9</b> templates: 8 wave 1, 0 wave 2, 0 wave 3, 1 new</span><span>build order <b>8</b></span></div>
+<h3 id="scenes-flusier">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">pet_room</td><td><span class="chip w1">t25_map</span></td><td>Scroll the room and its neighbors. Each toy is a station.</td></tr><tr><td class="id">egg_hatch</td><td><span class="chip wx">x_hatch</span></td><td>Tap the egg until it cracks and a pet comes out.</td></tr><tr><td class="id">feed_bowl</td><td><span class="chip w1">t20_drag_snap</span></td><td>Drag food to the bowl. The pets come to eat.</td></tr><tr><td class="id">bath_tub</td><td><span class="chip w1">t40_draw_fill</span></td><td>Rub a pet with foam, then rinse it.</td></tr><tr><td class="id">play_toys</td><td><span class="chip w1">t21_touch_each</span></td><td>Touch the hammock, the seesaw and the bowl. Each one plays.</td></tr><tr><td class="id">dress_up</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Pick clothes for a pet.</td></tr><tr><td class="id">room_decorate</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Place furniture and rugs in the room.</td></tr><tr><td class="id">flying_game</td><td><span class="chip w1">t50_lanes</span></td><td>Switch lanes to collect stars. No crashing.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>Coins and a new egg.</td></tr></tbody></table></div>
+<h3 id="arch-flusier">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Flusier</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>10 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w1">t20_drag_snap</span><span class="chip w1">t40_draw_fill</span><span class="chip w1">t21_touch_each</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t50_lanes</span><span class="chip w1">t32_reward</span></span></div>
+  <div class="row"><span class="l">new here</span><span><span class="chip wx">x_hatch</span></span></div>
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Give→Receive · Rub · Steer + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-flusier">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Pet collection</b></td><td>A list of pets with a few looks each, saved on the device. A collection book shows what is missing.</td><td class="dim">FluvsiesCollectionData, ClothesCollectionData</td></tr><tr><td><b>Egg and hatch</b></td><td>Eggs come from a local table and hatch after taps. No server clock.</td><td class="dim">EggSpawnTimesData (Fluvsies), HatchingUI (Smolsies 2)</td></tr><tr><td><b>Toy stations</b></td><td>Each toy in a room is a small activity with its own loop.</td><td class="dim">ActivityStationToyBase, RoomActivityToyBase</td></tr><tr><td><b>Many pets on screen</b></td><td>A light pet rig. QuiQuiRig is built for one hero.</td><td class="dim">Fluvsies, Giggle Babies</td></tr><tr><td><b>Pet needs</b></td><td>Hunger and mood per pet, shown as icons above the head. Never blocks play.</td><td class="dim">HungerTimer, MindBubbleDisplayState</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>10 pets with 3 looks each, and 4 rooms.</li><li>About 12 toys and the furniture for the rooms.</li><li>Egg, hatch and pet sounds, and a voice line per room.</li></ul></li>
+    <li><b>Progression</b><span>Hatching and caring fill the collection book. Stars open new rooms.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>QuiQuiRig is built for one hero. Many pets need a lighter rig.</li><li>Fluvsies depends on live events and server time. This game must work fully offline.</li><li>Per-pet needs can turn into pressure. They only change an icon.</li><li>The hatch template is new and needs its own scope.</li></ul></li>
+    <li><b>First playable slice</b><span>One room, three pets, one toy station and one egg.</span><span class="dim" style="margin-top:6px">Eighth game. It shares the TutoTOONS type &quot;pet care and collect&quot; with Care, but it is Form C: many pets in rooms instead of one hero.</span></li>
+  </ul>
+</div></section>
+<section class="gamesection" id="game-town"><div style="display:flex;flex-direction:column;gap:10px">
+  <span class="eyebrow">Game 9 of 9 · Town &amp; world sandbox · repo big-quiqui-town</span>
+  <h2>QuiQui Town</h2>
+  <p class="lede">QuiQui lives in a small town. The child walks around, decorates a home and visits friends. <strong>&quot;This is my place.&quot;</strong></p>
+  
+</div>
+<div class="refbox">
+  <div>
+    <span class="eyebrow">Closest TutoTOONS game</span>
+    <h3 style="margin:4px 0 8px">Dopples World <span class="chip fc">Form C</span></h3>
+    <div class="facts"><span><b>569 MB</b> download</span><span><b>3,993</b> own types</span><span><b>55 files + 52 packs</b></span></div>
+    <p style="margin-top:10px">The only town game in the sample. It has a map, areas, avatar and home customization.</p>
+    <h4 style="margin-top:10px">Related type names by theme</h4><div class="bars"><div class="bar"><span>world</span><i style="width:100%"></i><span>156</span></div><div class="bar"><span>makeover</span><i style="width:55%"></i><span>86</span></div><div class="bar"><span>kitchen</span><i style="width:47%"></i><span>74</span></div><div class="bar"><span>movement</span><i style="width:16%"></i><span>25</span></div><div class="bar"><span>garden</span><i style="width:11%"></i><span>17</span></div><div class="bar"><span>music</span><i style="width:10%"></i><span>16</span></div><div class="bar"><span>collect</span><i style="width:9%"></i><span>14</span></div><div class="bar"><span>care</span><i style="width:8%"></i><span>13</span></div></div>
+  </div>
+  <div>
+    <h4>Take</h4><ul><li>A map of areas, a walkable character, a decorated home that is saved. Namespaces: MainMap, Area, HomeCustomization, AvatarCustomization.</li></ul>
+    <h4 style="margin-top:10px">Skip</h4><ul><li>Traffic, weather, lights, ads, 52 delivery packs, and anything that needs a network.</li></ul>
+    <h4 style="margin-top:10px">Also look at</h4><ul><li>Fluvsies is a pet room version of Form C: toys are activity stations in a room. It needs live events and server time, which we skip.</li></ul>
+  </div>
+</div>
+<div class="facts" style="margin-top:-8px"><span><b>8</b> scenes in the first version (proposed)</span><span><b>8</b> templates: 7 wave 1, 0 wave 2, 0 wave 3, 1 new</span><span>build order <b>9</b></span></div>
+<h3 id="scenes-town">Scenes</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Scene id</th><th>Template</th><th>What the child does</th></tr></thead><tbody><tr><td class="id">title</td><td><span class="chip w1">t0_title</span></td><td>Tap play.</td></tr><tr><td class="id">town_map</td><td><span class="chip w1">t25_map</span></td><td>Scroll the town. Houses, park, shop.</td></tr><tr><td class="id">walk</td><td><span class="chip wx">x_walk</span></td><td>QuiQui walks. Tap a door to go in.</td></tr><tr><td class="id">home</td><td><span class="chip w1">t45_dress_decorate</span></td><td>Place furniture anywhere on a grid. It stays saved.</td></tr><tr><td class="id">shop</td><td><span class="chip w1">t51_prize_pick</span></td><td>Pick an item to buy with coins.</td></tr><tr><td class="id">friend_house</td><td><span class="chip w1">t22_play_beat</span></td><td>A friend welcomes QuiQui.</td></tr><tr><td class="id">playground</td><td><span class="chip w1">t21_touch_each</span></td><td>Touch each toy.</td></tr><tr><td class="id">reward</td><td><span class="chip w1">t32_reward</span></td><td>Coins for visiting friends.</td></tr></tbody></table></div>
+<h3 id="arch-town">Architecture of this game</h3>
+<div class="strip">
+  <div class="row"><span class="l">L4 game</span><span><b>QuiQui Town</b>: scene data, hub, progression, content packs</span></div>
+  <div class="row"><span class="l">L3 data</span><span>8 scenes as <span class="mono">SceneDef</span> files, no scene scripts</span></div>
+  <div class="row"><span class="l">L2 core</span><span><span class="chip w1">t0_title</span><span class="chip w1">t25_map</span><span class="chip w1">t45_dress_decorate</span><span class="chip w1">t51_prize_pick</span><span class="chip w1">t22_play_beat</span><span class="chip w1">t21_touch_each</span><span class="chip w1">t32_reward</span></span></div>
+  <div class="row"><span class="l">new here</span><span><span class="chip wx">x_walk</span></span></div>
+  <div class="row"><span class="l">L1 core</span><span>Tap · Pan · Steer · Give→Receive + Reactions + Hint layer</span></div>
+  <div class="row"><span class="l">L0 core</span><span>Log · ProgressManager · AudioManager · SceneManager · Fsm · QuiQuiRig · TouchDraggable</span></div>
+</div>
+<h3 id="specific-town">What is specific to this game</h3>
+<div class="tbl"><table style="min-width:560px"><thead><tr><th>Game-specific module</th><th>What it does</th><th>Evidence</th></tr></thead><tbody><tr><td><b>Walkable overworld</b></td><td>Free movement with door triggers.</td><td class="dim">Steer, Form C</td></tr><tr><td><b>Home layout</b></td><td>Furniture on a grid, saved between sessions.</td><td class="dim">GridGroundSystem, HomeCustomization</td></tr><tr><td><b>Area unlocks</b></td><td>Streets and houses open with stars.</td><td class="dim">LockedAreaPreview</td></tr><tr><td><b>Friend visits</b></td><td>Scripted daily visits. No network.</td><td class="dim">new</td></tr></tbody></table></div>
+<div class="rules">
+  <ul class="rules" style="grid-column:1/-1">
+    <li><b>Content to make</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>A town of 6 areas, 12 furniture pieces per room.</li><li>4 friend characters with a house each.</li></ul></li>
+    <li><b>Progression</b><span>Stars open areas. Visiting friends gives coins for furniture.</span></li>
+    <li><b>Risks</b><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:.92rem"><li>Largest game of the eight. Form C is 4,000 own types in the original.</li><li>Needs a new walk template and a saved-layout schema.</li><li>Build it last, on a mature core.</li></ul></li>
+    <li><b>First playable slice</b><span>One street, one home, one friend.</span><span class="dim" style="margin-top:6px">Ninth and last game. The current vila scene of big-quiqui-v2 is the seed.</span></li>
+  </ul>
+</div></section>
+<section>
+  <p class="note">Evidence: the REA passes over the 24 TutoTOONS titles installed on the Tab A7 Lite (type and method names from IL2CPP metadata), plus the scene-file pass over the 13 Builder titles (1,845 scenes). Game types are my reading of each title plus the data. Scene counts of the QuiQui games are proposals, not measurements. Counts for Forms B and C are level files only, because those titles load most content from delivery packs. The other 33 TutoTOONS titles are not on the device and are not covered.</p>
+</section>
+</div>
+</body></html>
