@@ -1,0 +1,56 @@
+epic: e01
+stories:
+  - id: e01s01
+    title: Test helpers
+    tasks:
+      - id: e01s01-t1
+        what: Port TouchSim from v2 (spec: BACKLOG ports, S1); test that tap and drag events carry the mouse echo
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_touch_sim -gexit
+      - id: e01s01-t2
+        what: Write TestReset for this repo (no v2 types); test that it deletes the test save
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_test_reset -gexit
+  - id: e01s02
+    title: Data model
+    tasks:
+      - id: e01s02-t1
+        what: Reaction, StepDef, SceneDef typed Resources with validate() returning error strings
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_scene_data -gexit
+  - id: e01s03
+    title: Scene player Fsm
+    tasks:
+      - id: e01s03-t1
+        what: ScenePlayer Fsm table LOAD INTRO STEP STEP_DONE OUTRO EXIT, Home leaves from any state
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_scene_player -gexit
+      - id: e01s03-t2
+        what: ReactionRunner turns a Reaction list into ordered effect calls through a sink interface
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_reaction_runner -gexit
+  - id: e01s04
+    title: t23_erase
+    tasks:
+      - id: e01s04-t1
+        what: EraseTemplate clears a coverage grid by rubbing, done at threshold 0.9, rubbing outside does nothing
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t23_erase -gexit
+  - id: e01s05
+    title: t20_drag_snap
+    tasks:
+      - id: e01s05-t1
+        what: DragSnapTemplate delivers items to a target, a miss returns the item, done when all delivered
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t20_drag_snap -gexit
+  - id: e01s06
+    title: Hint after idle
+    tasks:
+      - id: e01s06-t1
+        what: HintTimer fires after idle seconds, resets on input, never ends a step
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_hint -gexit
+  - id: e01s07
+    title: Living room playable
+    tasks:
+      - id: e01s07-t1
+        what: Copy assets by script with English names; living_room.tres validates and references real files
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_living_room_data -gexit
+      - id: e01s07-t2
+        what: Player scene runs living_room end to end headless, then play again restarts at step 0
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_living_room_flow -gexit
+      - id: e01s07-t3
+        what: In-engine screenshot of the living room (visual-verification-workflow)
+        verify: bash scripts/capture_scene.sh living_room

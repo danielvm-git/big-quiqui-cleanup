@@ -1,0 +1,7 @@
+release: 0.1.0
+epics:
+  - id: e01
+    slice: S1
+    title: The living room
+    wsjf: 1
+    capsule: specs/epics/e01-living-room

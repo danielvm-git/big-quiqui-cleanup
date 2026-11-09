@@ -65,6 +65,9 @@ for f in specs/adr/ADR-*.md; do
 	grep -q '^- \*\*Status:\*\*' "$f" && pass "$(basename "$f") has a status" || fail "$f has no Status line"
 done
 
+stage "L4 traceability"
+run "trace stories (strict)" bash scripts/trace_stories.sh --strict
+
 printf '\n'
 if [ "$FAILED" -eq 0 ]; then
 	printf 'GATES GREEN%s\n' "$([ "$FAST" -eq 1 ] && echo ' (fast mode, tests skipped)')"

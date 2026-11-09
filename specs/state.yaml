@@ -1,0 +1,14 @@
+active_epic: e01
+active_story: none
+branch: feat/e01-living-room
+decisions:
+  - gate: "EPIC mapping"
+    decision: "e01 = backlog slice S1 (user chose it in chat)"
+  - gate: "Missing scaffolding"
+    decision: "Created state.yaml, release-plan.yaml, execution-status.yaml, e01 capsule. No CONVENTIONS.md: AGENTS.md is the conventions file"
+  - gate: "Commit attribution"
+    decision: "No Co-Authored-By trailer: AGENTS.md and .githooks/commit-msg forbid it"
+  - gate: "request-review / respond-review"
+    decision: "Fixed review findings 1-5, 9, 10 with tests (hint restart, first-touch reaction, stuck carry, completion beat, echo filter in views, toy touch/tween hygiene, null scene guard). Deferred: 6 (single booleans in HintTimer/templates are not flag clusters; revisit if a state grows), 8 (wait reaction needs an async sink, S2)"
+  - gate: "audit-code"
+    decision: "Own checklist: size bars, typing, core boundary, two tscn all pass; no gate weakened"
