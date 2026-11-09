@@ -18,6 +18,19 @@ This game also builds the shared core of the QuiQui line (`game/addons/quiqui_co
 
 Godot 4.7, GDScript, GUT 9.6 (vendored, never edit `game/addons/gut`), gdtoolkit for lint and format.
 
+## Observability
+
+Local and developer-only (ADR-004: no telemetry, nothing leaves the device). Debug builds print one JSON
+object per line to stdout through `Log` (`game/scripts/log.gd`), with `level`, `timestamp`, `message` and
+context. Release builds print nothing. Never log a name, a path or typed text.
+
+| What | Command |
+|---|---|
+| Health: boots and the living room loads | `bash scripts/health.sh` |
+| View the log lines | `godot --path game 2>&1 \| grep '"message"'` |
+| All gates | `bash scripts/preflight.sh` |
+| Setup again (safe to repeat) | `bash scripts/setup.sh` |
+
 ## Rules
 
 1. **A scene is data.** One player scene runs `SceneDef` resources. No per-scene scripts (ADR-001).

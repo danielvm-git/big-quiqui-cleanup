@@ -25,11 +25,13 @@ func _ready() -> void:
 	var def: SceneDef = load("%s%s.tres" % [SCENE_DIR, scene_id]) as SceneDef
 	if def == null or not scene_player.load_scene(def):
 		push_error("scene %s is missing or invalid: %s" % [scene_id, scene_player.errors])
+		Log.error("scene_invalid", {"scene": scene_id, "errors": scene_player.errors.size()})
 		return
+	Log.info("scene_loaded", {"scene": scene_id, "steps": def.steps.size()})
 	_build_chrome(def)
 	scene_player.step_started.connect(_on_step_started)
 	scene_player.fsm.transitioned.connect(_on_transitioned)
-	scene_player.exited.connect(func(target: String) -> void: left.emit(target))
+	scene_player.exited.connect(_on_exited)
 	_begin()
 
 
@@ -46,6 +48,7 @@ func template() -> StepTemplate:
 
 
 func play_again() -> void:
+	Log.info("play_again", {"scene": scene_id})
 	_clear_view()
 	if _outro != null:
 		_outro.visible = false
@@ -97,7 +100,8 @@ func _button(key: String, at: Vector2, action: Callable) -> TextureButton:
 	return button
 
 
-func _on_step_started(_index: int, step: StepDef) -> void:
+func _on_step_started(index: int, step: StepDef) -> void:
+	Log.info("step_started", {"scene": scene_id, "index": index, "template": step.template})
 	_clear_view()
 	hint.notify_input()
 	_view = _make_view(step)
@@ -122,8 +126,14 @@ func _on_step_completed() -> void:
 		await get_tree().create_timer(beat_sec).timeout
 	if scene_player.state() != ScenePlayer.STEP or scene_player.step_index != index:
 		return
+	Log.info("step_completed", {"scene": scene_id, "index": index})
 	scene_player.step_finished()
 	scene_player.advance()
+
+
+func _on_exited(target: String) -> void:
+	Log.info("scene_left", {"scene": scene_id, "next": target})
+	left.emit(target)
 
 
 func _on_transitioned(_from: String, to_state: String) -> void:
