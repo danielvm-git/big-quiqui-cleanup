@@ -33,6 +33,14 @@ func coverage() -> float:
 	return float(_cleared_count) / float(_cols * _rows)
 
 
+func grid_size() -> Vector2i:
+	return Vector2i(_cols, _rows)
+
+
+func is_cell_cleared(col: int, row: int) -> bool:
+	return _cleared[row * _cols + col] == 1
+
+
 func rub_begin(point: Vector2) -> void:
 	_rubbing = true
 	_last = point

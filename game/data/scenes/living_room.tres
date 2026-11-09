@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_jliio"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_lbvbf"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_5wylm"]
+
+[sub_resource type="Resource" id="Resource_dt4cp"]
+script = ExtResource("3_5wylm")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_3gwnx"]
+script = ExtResource("3_5wylm")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_iugtw"]
+script = ExtResource("2_lbvbf")
+template = "t23_erase"
+params = {
+"cell": 20.0,
+"layer_rect": Rect2(300, 760, 1300, 320),
+"levels": 1,
+"radius": 60.0,
+"threshold": 0.9,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_5wylm")]([SubResource("Resource_dt4cp"), SubResource("Resource_3gwnx")])
+
+[sub_resource type="Resource" id="Resource_mcbti"]
+script = ExtResource("3_5wylm")
+kind = "sfx"
+value = "success"
+
+[sub_resource type="Resource" id="Resource_g2mqa"]
+script = ExtResource("3_5wylm")
+kind = "pose"
+value = "jump"
+
+[sub_resource type="Resource" id="Resource_tdw6l"]
+script = ExtResource("3_5wylm")
+kind = "fx"
+value = "sparkle"
+
+[sub_resource type="Resource" id="Resource_jon4f"]
+script = ExtResource("3_5wylm")
+kind = "sfx"
+value = "soft_miss"
+
+[sub_resource type="Resource" id="Resource_1vl3t"]
+script = ExtResource("3_5wylm")
+kind = "pose"
+value = "idle"
+
+[sub_resource type="Resource" id="Resource_3wrwf"]
+script = ExtResource("2_lbvbf")
+template = "t20_drag_snap"
+params = {
+"homes": {
+"ball": Vector2(980, 860),
+"plush": Vector2(1180, 940),
+"toy_duck": Vector2(800, 960)
+},
+"items": ["ball", "plush", "toy_duck"],
+"target_rect": Rect2(430, 300, 320, 500)
+}
+on_hit = Array[ExtResource("3_5wylm")]([SubResource("Resource_mcbti"), SubResource("Resource_g2mqa"), SubResource("Resource_tdw6l")])
+on_miss = Array[ExtResource("3_5wylm")]([SubResource("Resource_jon4f"), SubResource("Resource_1vl3t")])
+
+[resource]
+script = ExtResource("1_jliio")
+id = "living_room"
+background = "backgrounds/living_room"
+music = "music/main_theme"
+steps = Array[ExtResource("2_lbvbf")]([SubResource("Resource_iugtw"), SubResource("Resource_3wrwf")])

@@ -106,3 +106,11 @@ func test_a_real_touch_drag_rubs() -> void:
 	drag.position = Vector2(300, 150)
 	template.handle_input(drag)
 	assert_gt(template.coverage(), 0.0)
+
+
+func test_the_grid_can_be_read_back_for_drawing() -> void:
+	var template: EraseTemplate = _make()
+	assert_eq(template.grid_size(), Vector2i(20, 10))
+	template.rub_begin(Vector2(110, 110))
+	assert_true(template.is_cell_cleared(0, 0))
+	assert_false(template.is_cell_cleared(19, 9))
