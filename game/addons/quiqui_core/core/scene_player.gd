@@ -70,6 +70,11 @@ func go_home() -> void:
 	_leave("")
 
 
+## Leaves for another scene by id (the map uses this to open a room).
+func leave_to(target: String) -> void:
+	_leave(target)
+
+
 func restart() -> void:
 	step_index = 0
 	exit_target = ""

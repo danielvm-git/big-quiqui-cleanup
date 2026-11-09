@@ -42,13 +42,6 @@ func test_all_clean_when_every_room_is_clean() -> void:
 	assert_true(house.all_clean())
 
 
-func test_a_room_can_be_made_dirty_again_for_a_replay() -> void:
-	var house: HouseState = _house()
-	house.mark_clean("kitchen")
-	house.make_dirty("kitchen")
-	assert_false(house.is_clean("kitchen"))
-
-
 func test_clean_ids_keeps_the_room_order() -> void:
 	var house: HouseState = _house()
 	house.mark_clean("bathroom")

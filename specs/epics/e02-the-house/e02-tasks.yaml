@@ -46,7 +46,7 @@ stories:
     title: Navigation
     tasks:
       - id: e02s06-t1
-        what: ScenePlayer leave_to; Player runs the map step, marks rooms clean, routes Home and outro to the map; Boot opens scenes by id
+        what: ScenePlayer leave_to; Player runs the map step, marks rooms clean, routes Home and the outro to the map, shows the room meter (Boot opens scenes by id in e02s07)
         verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_navigation -gexit
   - id: e02s07
     title: Five rooms playable

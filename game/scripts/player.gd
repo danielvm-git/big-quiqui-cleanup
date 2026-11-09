@@ -14,6 +14,13 @@ const HIT_GROUP: String = "hit_target"
 var beat_sec: float = 0.6
 ## Content lives on a 1920x1080 stage centered in any screen; only the background fills it.
 var stage: Control = Control.new()
+## Tests and tools can hand a scene in instead of loading it from data/scenes.
+var def_override: SceneDef = null
+## Shared by the whole session. Null means no progress is kept.
+var house: HouseState = null
+var home_button: TextureButton = null
+var outro_button: TextureButton = null
+var meter: RoomMeter = RoomMeter.new()
 var scene_id: String = "living_room"
 var scene_player: ScenePlayer = ScenePlayer.new()
 var hint: HintTimer = HintTimer.new(5.0)
@@ -21,12 +28,13 @@ var hint: HintTimer = HintTimer.new(5.0)
 var _view: Control = null
 var _sink: GameSink = GameSink.new()
 var _quiqui: TextureRect = TextureRect.new()
-var _outro: Control = null
 
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	var def: SceneDef = load("%s%s.tres" % [SCENE_DIR, scene_id]) as SceneDef
+	var def: SceneDef = def_override
+	if def == null:
+		def = load("%s%s.tres" % [SCENE_DIR, scene_id]) as SceneDef
 	if def == null or not scene_player.load_scene(def):
 		push_error("scene %s is missing or invalid: %s" % [scene_id, scene_player.errors])
 		Log.error("scene_invalid", {"scene": scene_id, "errors": scene_player.errors.size()})
@@ -54,8 +62,8 @@ func template() -> StepTemplate:
 func play_again() -> void:
 	Log.info("play_again", {"scene": scene_id})
 	_clear_view()
-	if _outro != null:
-		_outro.visible = false
+	if outro_button != null:
+		outro_button.visible = false
 	scene_player.restart()
 	hint.start()
 	_begin()
@@ -88,10 +96,26 @@ func _build_chrome(def: SceneDef) -> void:
 	stage.add_child(_quiqui)
 	_sink.quiqui = _quiqui
 	_sink.host = stage
-	stage.add_child(_button("ui/home_button", Vector2(40, 40), go_home))
+	home_button = _button("ui/home_button", Vector2(40, 40), go_home)
+	stage.add_child(home_button)
+	_build_meter(def)
 	_sink.play_music(def.music)
 	hint.hint_shown.connect(func() -> void: _set_hint(true))
 	hint.hint_hidden.connect(func() -> void: _set_hint(false))
+
+
+func _is_map(def: SceneDef) -> bool:
+	return def.steps.size() == 1 and def.steps[0].template == "t25_map"
+
+
+func _build_meter(def: SceneDef) -> void:
+	meter.configure(def.steps.size())
+	meter.position = Vector2((STAGE_SIZE.x - meter.size.x) * 0.5, 40)
+	stage.add_child(meter)
+	var on_map: bool = _is_map(def)
+	meter.visible = not on_map
+	home_button.visible = not on_map
+	_quiqui.visible = not on_map
 
 
 func _center_stage() -> void:
@@ -119,20 +143,28 @@ func _on_step_started(index: int, step: StepDef) -> void:
 	Log.info("step_started", {"scene": scene_id, "index": index, "template": step.template})
 	_clear_view()
 	hint.notify_input()
-	_view = _make_view(step)
+	meter.fill(index)
+	_view = ViewFactory.make(step, _clean_rooms())
 	stage.add_child(_view)
 	stage.move_child(_view, 0)
 	var template_now: StepTemplate = template()
 	template_now.hit.connect(func() -> void: ReactionRunner.run(step.on_hit, _sink))
 	template_now.miss.connect(func() -> void: ReactionRunner.run(step.on_miss, _sink))
 	template_now.completed.connect(_on_step_completed)
+	if template_now is MapTemplate:
+		(template_now as MapTemplate).room_chosen.connect(scene_player.leave_to)
 	_view.connect("touched", hint.notify_input)
 
 
-func _make_view(step: StepDef) -> Control:
-	var view: Control = DirtView.new() if step.template == "t23_erase" else ToyView.new()
-	view.call("configure", step.params)
-	return view
+func _clean_rooms() -> Array[String]:
+	if house == null:
+		return [] as Array[String]
+	return house.clean_ids()
+
+
+## The outro button: on to the next scene, usually the map.
+func continue_to_next() -> void:
+	scene_player.advance()
 
 
 func _on_step_completed() -> void:
@@ -159,14 +191,17 @@ func _on_transitioned(_from: String, to_state: String) -> void:
 func _show_outro() -> void:
 	_clear_view()
 	hint.stop()
+	meter.fill(scene_player.scene.steps.size())
+	if house != null:
+		house.mark_clean(scene_id)
 	_sink.play_pose(OUTRO_POSE)
 	_sink.play_sfx("success")
 	_sink.play_fx("sparkle")
-	if _outro == null:
-		_outro = _button("ui/play_button", Vector2(875, 450), play_again)
-		_outro.size = Vector2(240, 240)
-		stage.add_child(_outro)
-	_outro.visible = true
+	if outro_button == null:
+		outro_button = _button("ui/play_button", Vector2(875, 450), continue_to_next)
+		outro_button.size = Vector2(240, 240)
+		stage.add_child(outro_button)
+	outro_button.visible = true
 
 
 func _set_hint(on: bool) -> void:

@@ -11,15 +11,19 @@ func _init(room_ids: Array[String] = []) -> void:
 	rooms = room_ids
 
 
+## The room ids of a map scene, in the order the map lists them.
+static func from_map(map: SceneDef) -> HouseState:
+	var ids: Array[String] = []
+	for room: Variant in map.steps[0].params.get("rooms", []) as Array:
+		ids.append(str((room as Dictionary)["id"]))
+	return HouseState.new(ids)
+
+
 func mark_clean(room_id: String) -> bool:
 	if not rooms.has(room_id):
 		return false
 	_clean[room_id] = true
 	return true
-
-
-func make_dirty(room_id: String) -> void:
-	_clean.erase(room_id)
 
 
 func is_clean(room_id: String) -> bool:
