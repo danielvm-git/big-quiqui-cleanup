@@ -27,6 +27,8 @@ copy art/quiqui/quiqui_acenando.png art/quiqui/wave.png
 copy art/quiqui/quiqui_brilhando.png art/quiqui/sparkle.png
 copy art/ui/botao_casa.png art/ui/home_button.png
 copy art/ui/botao_play.png art/ui/play_button.png
+copy art/ui/bolinha_progresso.png art/ui/dot_full.png
+copy art/ui/bolinha_progresso_vazia.png art/ui/dot_empty.png
 copy audio/sfx/tap.ogg audio/sfx/tap.ogg
 copy audio/sfx/success.ogg audio/sfx/success.ogg
 copy audio/sfx/drop.ogg audio/sfx/drop.ogg
