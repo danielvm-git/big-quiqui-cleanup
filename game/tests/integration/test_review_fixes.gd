@@ -88,6 +88,17 @@ func test_the_outro_button_is_centered_on_the_stage() -> void:
 	assert_eq(center, Vector2(960, 540))
 
 
+var _supported: Array[String] = []
+
+
+func before_each() -> void:
+	_supported = ViewFactory.supported.duplicate()
+
+
+func after_each() -> void:
+	ViewFactory.supported = _supported.duplicate()
+
+
 func test_a_scene_with_an_unsupported_template_reports_failed() -> void:
 	ViewFactory.supported.erase("t0_title")
 	var def: SceneDef = SceneDef.new()

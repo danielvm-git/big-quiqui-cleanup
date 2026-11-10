@@ -6,10 +6,13 @@ extends Control
 signal reset_confirmed
 signal closed
 
+const ARM_SEC: float = 5.0
+
 var reset_button: Button = Button.new()
 var close_button: Button = Button.new()
 
 var _armed: bool = false
+var _disarm: Tween = null
 var _note: Label = Label.new()
 
 
@@ -37,7 +40,8 @@ func _init() -> void:
 func _add_dim() -> void:
 	var dim: ColorRect = ColorRect.new()
 	dim.color = Color(0.2, 0.12, 0.08, 0.7)
-	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	dim.position = Vector2(-3000, -3000)
+	dim.size = Vector2(8000, 8000)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(dim)
 
@@ -55,20 +59,31 @@ func open() -> void:
 
 
 func close() -> void:
-	_armed = false
-	reset_button.text = tr("Reset progress")
+	disarm()
 	visible = false
 	closed.emit()
 
 
+## Back to "Reset progress". It also happens by itself a few seconds after the first tap.
+func disarm() -> void:
+	_armed = false
+	reset_button.text = tr("Reset progress")
+	if _disarm != null:
+		_disarm.kill()
+		_disarm = null
+
+
+## The second tap resets and closes the panel: the panel going away is the answer.
 func _on_reset() -> void:
 	if not _armed:
 		_armed = true
 		reset_button.text = tr("Tap again to reset")
+		_disarm = create_tween()
+		_disarm.tween_callback(disarm).set_delay(ARM_SEC)
 		return
-	_armed = false
-	reset_button.text = tr("Reset progress")
+	disarm()
 	reset_confirmed.emit()
+	close()
 
 
 func _style(button: Button, text: String, parent: Control) -> void:

@@ -8,9 +8,13 @@ STRICT=0
 if [ "${1:-}" = "--strict" ]; then STRICT=1; shift; fi
 LOCALE="${1:-pt_BR}"
 DIR="$ROOT/game/assets/audio/voice/$LOCALE"
+if [ ! -d "$DIR" ] && [ -d "$ROOT/game/assets/audio/voice" ]; then
+	echo "  FAIL voice: no folder for locale '$LOCALE'"
+	exit 2
+fi
 missing=0
 keys="$(grep -h -A1 -E '^(intro_voice = |kind = "voice")' "$ROOT"/game/data/scenes/*.tres \
-	| grep -oE '"vo\.[a-z0-9_.]+"' | tr -d '"' | sort -u)"
+	| grep -oE '"vo\.[A-Za-z0-9_.-]+"' | tr -d '"' | sort -u)"
 for key in $keys; do
 	file="$(echo "${key#vo.}" | tr '.' '_').ogg"
 	if [ ! -f "$DIR/$file" ]; then

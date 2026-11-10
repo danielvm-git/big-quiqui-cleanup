@@ -10,10 +10,11 @@ func _view() -> TitleView:
 	return view
 
 
-func _touch(pressed: bool, device: int = 0) -> InputEventScreenTouch:
+func _touch(pressed: bool, index: int = 0, at: Vector2 = Vector2(10, 10)) -> InputEventScreenTouch:
 	var event: InputEventScreenTouch = InputEventScreenTouch.new()
 	event.pressed = pressed
-	event.position = Vector2(10, 10)
+	event.index = index
+	event.position = at
 	return event
 
 
@@ -124,3 +125,54 @@ func test_progress_and_house_can_be_reset() -> void:
 	house.mark_clean("kitchen")
 	house.reset()
 	assert_eq(house.clean_count(), 0)
+
+
+func test_dragging_off_the_lock_breaks_the_hold() -> void:
+	var view: TitleView = _view()
+	view.lock_button.gui_input.emit(_touch(true))
+	var drag: InputEventScreenDrag = InputEventScreenDrag.new()
+	drag.position = Vector2(900, 100)
+	view._input(drag)
+	assert_eq(view.gate.state(), ParentGate.IDLE)
+
+
+func test_a_release_anywhere_ends_the_hold() -> void:
+	var view: TitleView = _view()
+	view.lock_button.gui_input.emit(_touch(true))
+	view._input(_touch(false))
+	assert_eq(view.gate.state(), ParentGate.IDLE)
+
+
+func test_losing_focus_ends_the_hold() -> void:
+	var view: TitleView = _view()
+	view.lock_button.gui_input.emit(_touch(true))
+	view._notification(MainLoop.NOTIFICATION_APPLICATION_FOCUS_OUT)
+	assert_eq(view.gate.state(), ParentGate.IDLE)
+
+
+func test_a_second_finger_neither_helps_nor_breaks_the_hold() -> void:
+	var view: TitleView = _view()
+	view.lock_button.gui_input.emit(_touch(true, 0))
+	view.lock_button.gui_input.emit(_touch(true, 1))
+	view.lock_button.gui_input.emit(_touch(false, 1))
+	assert_eq(view.gate.state(), ParentGate.HOLDING)
+
+
+func test_the_ring_stays_hidden_for_a_short_press() -> void:
+	var view: TitleView = _view()
+	view.lock_button.gui_input.emit(_touch(true))
+	view._process(0.1)
+	assert_false(view.ring_visible())
+	_hold_lock(view, 1.5)
+	assert_true(view.ring_visible())
+
+
+func test_the_panel_disarms_by_itself_and_closes_after_a_reset() -> void:
+	var view: TitleView = _view()
+	_hold_lock(view, 2.7)
+	view.panel.reset_button.pressed.emit()
+	view.panel.disarm()
+	assert_false(view.panel.is_armed())
+	view.panel.reset_button.pressed.emit()
+	view.panel.reset_button.pressed.emit()
+	assert_false(view.panel.visible, "the panel closes after a reset: that is the feedback")

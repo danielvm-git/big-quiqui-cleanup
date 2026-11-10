@@ -39,7 +39,7 @@ func test_the_before_layer_is_there_until_the_reveal_is_done() -> void:
 	var view: RevealView = _view()
 	assert_false(view.is_revealed())
 	assert_not_null(view.before_texture())
-	_rub_rows(view.template, 12)
+	StepSolver.solve(view.template, PARAMS)
 	assert_true(view.is_revealed())
 
 
@@ -69,3 +69,22 @@ func test_every_room_ends_with_a_reveal_that_has_its_art() -> void:
 		assert_eq(last.template, "t34_rub_reveal", id)
 		assert_not_null(Assets.texture(str(last.params["before"])), id)
 		assert_eq(last.params["layer_rect"], RECT)
+
+
+func test_the_layer_covers_the_whole_screen_not_only_the_stage() -> void:
+	var view: RevealView = _view()
+	assert_eq(view.global_position, Vector2.ZERO)
+	assert_eq(view.size, get_viewport().get_visible_rect().size)
+	assert_eq(view.template.layer_rect(), Rect2(Vector2.ZERO, get_viewport().get_visible_rect().size))
+
+
+func test_rubbing_the_whole_screen_completes_it() -> void:
+	var view: RevealView = _view()
+	var size_now: Vector2 = get_viewport().get_visible_rect().size
+	var y: float = 0.0
+	while y < size_now.y and not view.template.is_done():
+		view.template.rub_begin(Vector2(0, y))
+		view.template.rub_to(Vector2(size_now.x, y))
+		view.template.rub_end()
+		y += 100.0
+	assert_true(view.template.is_done())

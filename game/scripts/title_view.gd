@@ -5,6 +5,8 @@ extends Control
 signal touched
 
 const LOCK_SIZE: Vector2 = Vector2(140, 140)
+## The ring shows only after this share of the hold, so a child is not taught what to do.
+const RING_FROM: float = 0.35
 
 var template: TitleTemplate = TitleTemplate.new()
 var gate: ParentGate = ParentGate.new()
@@ -14,6 +16,7 @@ var panel: ParentPanel = ParentPanel.new()
 
 var _ring: Control = Control.new()
 var _pulse: Tween = null
+var _finger: int = -1
 
 
 func configure(_params: Dictionary) -> void:
@@ -79,14 +82,44 @@ func _on_lock_input(event: InputEvent) -> void:
 	if StepTemplate.is_echo(event) or not event is InputEventScreenTouch:
 		return
 	touched.emit()
-	if (event as InputEventScreenTouch).pressed:
+	var touch: InputEventScreenTouch = event as InputEventScreenTouch
+	if touch.pressed and _finger < 0:
+		_finger = touch.index
 		gate.press()
-	else:
-		gate.release()
+	elif not touch.pressed and touch.index == _finger:
+		_let_go()
+
+
+## The hold needs the same finger, on the lock, the whole time. A release anywhere or a drag away ends it.
+func _input(event: InputEvent) -> void:
+	if _finger < 0:
+		return
+	if event is InputEventScreenTouch:
+		var touch: InputEventScreenTouch = event as InputEventScreenTouch
+		if not touch.pressed and touch.index == _finger:
+			_let_go()
+	elif event is InputEventScreenDrag:
+		var drag: InputEventScreenDrag = event as InputEventScreenDrag
+		if drag.index == _finger and not lock_button.get_global_rect().has_point(drag.position):
+			_let_go()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_WM_WINDOW_FOCUS_OUT]:
+		_let_go()
+
+
+func _let_go() -> void:
+	_finger = -1
+	gate.release()
+
+
+func ring_visible() -> bool:
+	return gate.progress() >= RING_FROM
 
 
 ## The ring fills while the lock is held. A tap shows almost nothing.
 func _draw_ring() -> void:
-	if gate.progress() > 0.0:
+	if ring_visible():
 		var center: Vector2 = LOCK_SIZE * 0.5
 		_ring.draw_arc(center, 66.0, -PI / 2.0, -PI / 2.0 + TAU * gate.progress(), 48, Color(0.48, 0.29, 0.08), 10.0)

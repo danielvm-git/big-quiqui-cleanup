@@ -74,3 +74,13 @@ func test_every_room_names_an_intro_voice_by_key() -> void:
 	for id: String in ["living_room", "kitchen", "bathroom", "bedroom", "garden"]:
 		var def: SceneDef = load("res://data/scenes/%s.tres" % id) as SceneDef
 		assert_eq(def.intro_voice, "vo.%s.intro" % id)
+
+
+func test_a_new_line_replaces_the_one_still_playing() -> void:
+	var host: Node = Node.new()
+	add_child_autofree(host)
+	var sink: GameSink = GameSink.new()
+	sink.audio_host = host
+	sink.play_voice("vo.living_room.intro")
+	sink.play_voice("vo.living_room.intro")
+	assert_eq(_players(host), 1, "one voice channel, never two lines at once")

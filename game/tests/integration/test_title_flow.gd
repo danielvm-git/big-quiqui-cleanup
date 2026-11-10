@@ -88,8 +88,8 @@ func test_the_parent_area_resets_progress_and_the_house() -> void:
 func test_a_child_tapping_the_lock_never_reaches_the_parent_area() -> void:
 	var boot: Boot = await _boot()
 	var view: TitleView = boot.player.stage.get_child(0) as TitleView
-	for tap: int in 20:
+	for tap: int in 100:
 		_press(view.lock_button, true)
-		view._process(0.05)
+		view._process(0.1)
 		_press(view.lock_button, false)
 	assert_false(view.panel.visible)

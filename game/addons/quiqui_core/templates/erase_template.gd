@@ -29,6 +29,11 @@ func setup(params: Dictionary) -> void:
 	_reset_grid()
 
 
+## The area that can be rubbed. A view may widen it after setup (the reveal covers the whole screen).
+func layer_rect() -> Rect2:
+	return _rect
+
+
 func level_count() -> int:
 	return maxi(_levels, 1)
 
