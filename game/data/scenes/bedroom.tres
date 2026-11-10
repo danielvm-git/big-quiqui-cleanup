@@ -68,4 +68,4 @@ id = "bedroom"
 background = "backgrounds/bedroom"
 music = "music/main_theme"
 steps = Array[ExtResource("2_7t0nw")]([SubResource("Resource_h5o66"), SubResource("Resource_iu5le")])
-next = "house_map"
+next = "reward"

@@ -1,6 +1,6 @@
-active_epic: e02
+active_epic: e03
 active_story: none
-branch: feat/e02-the-house
+branch: feat/e03-reward-save
 decisions:
   - gate: "EPIC mapping"
     decision: "e01 = slice S1 (done, merged, v0.1.0). e02 = slice S2, requested by the user in chat"
@@ -16,3 +16,5 @@ decisions:
     decision: "Fixed review findings 1-6, 8-10 with tests (sound on the tree root, beat race via owned tween and run counter, hint pulse scale reset, outro centered, music owned by Boot, echo tests that can fail, failed signal and unsupported-template guard) and tightened data checks to whole boxes at 1.5x. Deferred: 7 (oracle does not audit pulse scales or the dirt layer as hit targets beyond the data check)"
   - gate: "e02 audit-code"
     decision: "Size bars checked by script (found and fixed a 27-line function), core boundary, typing and two .tscn pass; no gate weakened"
+  - gate: "e03 scope"
+    decision: "e03 = slice S3, requested in chat (proceed). A star carries one coin, no separate star total. SaveFile in the core takes its path as an argument. Bad save gives fresh progress"

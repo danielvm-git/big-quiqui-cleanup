@@ -45,4 +45,4 @@ id = "garden"
 background = "backgrounds/garden"
 music = "music/main_theme"
 steps = Array[ExtResource("2_xyjf8")]([SubResource("Resource_1ymuh")])
-next = "house_map"
+next = "reward"

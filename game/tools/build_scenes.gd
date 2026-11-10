@@ -8,6 +8,7 @@ const WIPE: Dictionary = {"cell": 20.0, "radius": 60.0, "threshold": 0.9}
 func _init() -> void:
 	var scenes: Array[SceneDef] = [
 		_map(),
+		_reward(),
 		_room("living_room", [_wipe(Rect2(300, 760, 1300, 320), 1), _toys_living_room()]),
 		_room("kitchen", [_dishes(), _wipe(Rect2(200, 800, 1500, 280), 2)]),
 		_room("bathroom", [_wipe(Rect2(180, 540, 760, 460), 2), _wipe(Rect2(1520, 80, 360, 340), 1)]),
@@ -15,16 +16,19 @@ func _init() -> void:
 		_room("garden", [_sweep_piles()]),
 	]
 	for scene: SceneDef in scenes:
-		var errors: PackedStringArray = scene.validate()
-		if not errors.is_empty():
-			push_error("%s: %s" % [scene.id, errors])
-			quit(1)
-			return
-		var status: int = ResourceSaver.save(scene, "res://data/scenes/%s.tres" % scene.id)
+		var status: int = _write(scene)
 		if status != OK:
 			quit(status)
 			return
 	quit(0)
+
+
+func _write(scene: SceneDef) -> int:
+	var errors: PackedStringArray = scene.validate()
+	if not errors.is_empty():
+		push_error("%s: %s" % [scene.id, errors])
+		return ERR_INVALID_DATA
+	return ResourceSaver.save(scene, "res://data/scenes/%s.tres" % scene.id)
 
 
 func _reaction(kind: String, value: String) -> Reaction:
@@ -48,7 +52,7 @@ func _room(id: String, steps: Array[StepDef]) -> SceneDef:
 	scene.id = id
 	scene.background = "backgrounds/" + id
 	scene.music = "music/main_theme"
-	scene.next = "house_map"
+	scene.next = "reward"
 	scene.steps = steps
 	return scene
 
@@ -104,6 +108,20 @@ func _sweep_piles() -> StepDef:
 	for id: String in positions:
 		art[id] = "effects/crumbs"
 	return _touch_each(["pile_1", "pile_2", "pile_3", "pile_4"], positions, art)
+
+
+func _reward() -> SceneDef:
+	var scene: SceneDef = SceneDef.new()
+	scene.id = "reward"
+	scene.background = "backgrounds/house"
+	scene.music = "music/main_theme"
+	scene.quiqui_pose = "jump"
+	scene.next = "house_map"
+	var hit: Array[Reaction] = [
+		_reaction("sfx", "select"), _reaction("pose", "jump"), _reaction("fx", "sparkle"), _reaction("coins", "1")
+	]
+	scene.steps = [_step("t32_reward", {"stars": 3}, hit, [] as Array[Reaction])]
+	return scene
 
 
 func _map() -> SceneDef:

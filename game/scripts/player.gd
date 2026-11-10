@@ -20,6 +20,9 @@ var stage: Control = Control.new()
 var def_override: SceneDef = null
 ## Shared by the whole session. Null means no progress is kept.
 var house: HouseState = null
+## What is kept between sessions and where. Either null or empty means nothing is saved.
+var progress: Progress = null
+var save_path: String = ""
 var home_button: TextureButton = null
 var outro_button: TextureButton = null
 var meter: RoomMeter = RoomMeter.new()
@@ -91,6 +94,7 @@ func _build_chrome(def: SceneDef) -> void:
 	_sink.quiqui = _quiqui
 	_sink.host = stage
 	_sink.audio_host = audio_host()
+	_sink.coins_added.connect(_on_coins)
 	home_button = _button("ui/home_button", Vector2(40, 40), go_home)
 	stage.add_child(home_button)
 	_build_meter(def)
@@ -223,8 +227,9 @@ func _show_outro() -> void:
 	_clear_view()
 	hint.stop()
 	meter.fill(scene_player.scene.steps.size())
-	if house != null:
-		house.mark_clean(scene_id)
+	if house != null and house.mark_clean(scene_id) and progress != null:
+		progress.mark_clean(scene_id)
+		_save()
 	_sink.play_pose(OUTRO_POSE)
 	_sink.play_sfx("success")
 	_sink.play_fx("sparkle")
@@ -233,6 +238,19 @@ func _show_outro() -> void:
 		outro_button.size = Vector2(240, 240)
 		stage.add_child(outro_button)
 	outro_button.visible = true
+
+
+func _on_coins(amount: int) -> void:
+	if progress != null:
+		progress.add_coins(amount)
+		_save()
+
+
+func _save() -> void:
+	if progress == null or save_path.is_empty():
+		return
+	if not progress.save_to(save_path):
+		Log.error("save_failed", {})
 
 
 func _set_hint(on: bool) -> void:

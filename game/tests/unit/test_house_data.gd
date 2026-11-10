@@ -2,7 +2,7 @@
 extends GutTest
 ## The house is data: every scene validates, every file it names exists, everything fits the stage.
 
-const SCENES: Array[String] = ["house_map", "living_room", "kitchen", "bathroom", "bedroom", "garden"]
+const SCENES: Array[String] = ["house_map", "living_room", "kitchen", "bathroom", "bedroom", "garden", "reward"]
 const ROOMS: Array[String] = ["living_room", "kitchen", "bathroom", "bedroom", "garden"]
 const STAGE: Rect2 = Rect2(0, 0, 1920, 1080)
 
@@ -24,9 +24,10 @@ func test_every_scene_has_background_and_music() -> void:
 		assert_not_null(Assets.sound(_scene(id).music), id)
 
 
-func test_every_room_ends_at_the_map_and_the_map_lists_every_room() -> void:
+func test_every_room_ends_at_the_reward_which_ends_at_the_map() -> void:
 	for id: String in ROOMS:
-		assert_eq(_scene(id).next, "house_map", id)
+		assert_eq(_scene(id).next, "reward", id)
+	assert_eq(_scene("reward").next, "house_map")
 	var ids: Array[String] = HouseState.from_map(_scene("house_map")).rooms
 	assert_eq(ids, ROOMS)
 
