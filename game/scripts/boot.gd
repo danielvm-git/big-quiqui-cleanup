@@ -4,6 +4,7 @@ extends Control
 ## outro come back here as `left`; an empty target means "the map".
 
 const MAP: String = "house_map"
+const TITLE: String = "title"
 
 var house: HouseState = null
 var progress: Progress = null
@@ -11,6 +12,8 @@ var save_path: String = "user://progress.json"
 var player: Player = null
 ## Passed to every player. Tests set it to zero.
 var beat_sec: float = 0.6
+## The first scene. Tests that care about the map start there.
+var start_scene: String = TITLE
 
 
 func _ready() -> void:
@@ -22,7 +25,7 @@ func _ready() -> void:
 	var sink: GameSink = GameSink.new()
 	sink.host = self
 	sink.play_music(map.music)
-	_open(MAP)
+	_open(start_scene)
 
 
 func _open(scene_id: String) -> void:

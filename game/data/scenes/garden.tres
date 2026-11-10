@@ -39,10 +39,35 @@ params = {
 }
 on_hit = Array[ExtResource("3_a472a")]([SubResource("Resource_xomxt"), SubResource("Resource_6lho6"), SubResource("Resource_vrsln")])
 
+[sub_resource type="Resource" id="Resource_pbvsa"]
+script = ExtResource("3_a472a")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_2321k"]
+script = ExtResource("3_a472a")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_gcqp2"]
+script = ExtResource("2_xyjf8")
+template = "t34_rub_reveal"
+params = {
+"before": "before/garden",
+"cell": 40.0,
+"layer_rect": Rect2(0, 0, 1920, 1080),
+"levels": 1,
+"radius": 100.0,
+"threshold": 0.7,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_a472a")]([SubResource("Resource_pbvsa"), SubResource("Resource_2321k")])
+
 [resource]
 script = ExtResource("1_malch")
 id = "garden"
 background = "backgrounds/garden"
 music = "music/main_theme"
-steps = Array[ExtResource("2_xyjf8")]([SubResource("Resource_1ymuh")])
+intro_voice = "vo.garden.intro"
+steps = Array[ExtResource("2_xyjf8")]([SubResource("Resource_1ymuh"), SubResource("Resource_gcqp2")])
 next = "reward"

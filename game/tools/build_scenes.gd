@@ -7,6 +7,7 @@ const WIPE: Dictionary = {"cell": 20.0, "radius": 60.0, "threshold": 0.9}
 
 func _init() -> void:
 	var scenes: Array[SceneDef] = [
+		_title(),
 		_map(),
 		_reward(),
 		_room("living_room", [_wipe(Rect2(300, 760, 1300, 320), 1), _toys_living_room()]),
@@ -48,13 +49,30 @@ func _step(template: String, params: Dictionary, hit: Array[Reaction], miss: Arr
 
 
 func _room(id: String, steps: Array[StepDef]) -> SceneDef:
+	steps.append(_reveal(id))
 	var scene: SceneDef = SceneDef.new()
 	scene.id = id
 	scene.background = "backgrounds/" + id
 	scene.music = "music/main_theme"
+	scene.intro_voice = "vo.%s.intro" % id
 	scene.next = "reward"
 	scene.steps = steps
 	return scene
+
+
+## The last step of every room: rub the hazy "before" picture away to show the clean room.
+func _reveal(room: String) -> StepDef:
+	var params: Dictionary = {
+		"layer_rect": Rect2(0, 0, 1920, 1080),
+		"cell": 40.0,
+		"radius": 100.0,
+		"threshold": 0.7,
+		"levels": 1,
+		"before": "before/" + room,
+		"tool": "sponge",
+	}
+	var hit: Array[Reaction] = [_reaction("sfx", "bubble"), _reaction("pose", "laugh")]
+	return _step("t34_rub_reveal", params, hit, [] as Array[Reaction])
 
 
 func _wipe(layer: Rect2, levels: int) -> StepDef:
@@ -121,6 +139,19 @@ func _reward() -> SceneDef:
 		_reaction("sfx", "select"), _reaction("pose", "jump"), _reaction("fx", "sparkle"), _reaction("coins", "1")
 	]
 	scene.steps = [_step("t32_reward", {"stars": 3}, hit, [] as Array[Reaction])]
+	return scene
+
+
+func _title() -> SceneDef:
+	var scene: SceneDef = SceneDef.new()
+	scene.id = "title"
+	scene.background = "backgrounds/house"
+	scene.music = "music/main_theme"
+	scene.quiqui_pose = "wave"
+	scene.next = "house_map"
+	scene.show_outro = false
+	var hit: Array[Reaction] = [_reaction("sfx", "tap"), _reaction("pose", "jump")]
+	scene.steps = [_step("t0_title", {}, hit, [] as Array[Reaction])]
 	return scene
 
 

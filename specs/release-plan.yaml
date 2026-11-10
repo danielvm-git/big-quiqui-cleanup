@@ -15,3 +15,8 @@ epics:
     title: Reward and save
     wsjf: 3
     capsule: specs/epics/e03-reward-save
+  - id: e04
+    slice: S4
+    title: Title and polish
+    wsjf: 4
+    capsule: specs/epics/e04-title-polish

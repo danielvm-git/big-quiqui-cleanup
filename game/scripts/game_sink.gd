@@ -28,7 +28,7 @@ func play_sfx(value: String) -> void:
 
 
 func play_voice(value: String) -> void:
-	_play(Assets.sound("voice/" + value))
+	_play(Assets.voice(value))
 
 
 func play_fx(value: String) -> void:

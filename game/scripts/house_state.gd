@@ -26,6 +26,10 @@ func mark_clean(room_id: String) -> bool:
 	return true
 
 
+func reset() -> void:
+	_clean.clear()
+
+
 func is_clean(room_id: String) -> bool:
 	return _clean.has(room_id)
 

@@ -55,6 +55,11 @@ func save_to(path: String) -> bool:
 	return SaveFile.write(path, to_dict())
 
 
+func reset() -> void:
+	clean.clear()
+	coins = 0
+
+
 func add_coins(amount: int) -> void:
 	coins = clampi(coins + maxi(amount, 0), 0, MAX_COINS)
 

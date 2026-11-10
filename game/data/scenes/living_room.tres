@@ -67,10 +67,35 @@ params = {
 on_hit = Array[ExtResource("3_5wylm")]([SubResource("Resource_mcbti"), SubResource("Resource_g2mqa"), SubResource("Resource_tdw6l")])
 on_miss = Array[ExtResource("3_5wylm")]([SubResource("Resource_jon4f"), SubResource("Resource_1vl3t")])
 
+[sub_resource type="Resource" id="Resource_4wgek"]
+script = ExtResource("3_5wylm")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_fbe1c"]
+script = ExtResource("3_5wylm")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_lrmi4"]
+script = ExtResource("2_lbvbf")
+template = "t34_rub_reveal"
+params = {
+"before": "before/living_room",
+"cell": 40.0,
+"layer_rect": Rect2(0, 0, 1920, 1080),
+"levels": 1,
+"radius": 100.0,
+"threshold": 0.7,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_5wylm")]([SubResource("Resource_4wgek"), SubResource("Resource_fbe1c")])
+
 [resource]
 script = ExtResource("1_jliio")
 id = "living_room"
 background = "backgrounds/living_room"
 music = "music/main_theme"
-steps = Array[ExtResource("2_lbvbf")]([SubResource("Resource_iugtw"), SubResource("Resource_3wrwf")])
+intro_voice = "vo.living_room.intro"
+steps = Array[ExtResource("2_lbvbf")]([SubResource("Resource_iugtw"), SubResource("Resource_3wrwf"), SubResource("Resource_lrmi4")])
 next = "reward"

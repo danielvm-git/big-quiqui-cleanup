@@ -10,6 +10,8 @@ extends Resource
 @export var steps: Array[StepDef] = []
 @export var reward: String = ""
 @export var next: String = ""
+## False for a scene that leaves at once (the title): no celebration, no second button.
+@export var show_outro: bool = true
 
 
 func validate() -> PackedStringArray:

@@ -67,10 +67,35 @@ params = {
 }
 on_hit = Array[ExtResource("3_hdcib")]([SubResource("Resource_xfhwd"), SubResource("Resource_2gm17")])
 
+[sub_resource type="Resource" id="Resource_x8hhc"]
+script = ExtResource("3_hdcib")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_os5ge"]
+script = ExtResource("3_hdcib")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_ldf2b"]
+script = ExtResource("2_tey8c")
+template = "t34_rub_reveal"
+params = {
+"before": "before/kitchen",
+"cell": 40.0,
+"layer_rect": Rect2(0, 0, 1920, 1080),
+"levels": 1,
+"radius": 100.0,
+"threshold": 0.7,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_hdcib")]([SubResource("Resource_x8hhc"), SubResource("Resource_os5ge")])
+
 [resource]
 script = ExtResource("1_nm0rg")
 id = "kitchen"
 background = "backgrounds/kitchen"
 music = "music/main_theme"
-steps = Array[ExtResource("2_tey8c")]([SubResource("Resource_2k7ea"), SubResource("Resource_yky0x")])
+intro_voice = "vo.kitchen.intro"
+steps = Array[ExtResource("2_tey8c")]([SubResource("Resource_2k7ea"), SubResource("Resource_yky0x"), SubResource("Resource_ldf2b")])
 next = "reward"
