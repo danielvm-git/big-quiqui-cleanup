@@ -25,6 +25,10 @@ uploads. Signing material never enters the repository: `scripts/check_export.sh`
 a provisioning profile, a signing identity or a tracked certificate. To bake your team id into an export without
 committing it, set `QQ_APPLE_TEAM_ID` in the environment.
 
+The CI export job runs in parallel with the release job, so its artifact carries the previous tag as the version. The real
+store build is exported by the owner from a fetched tag. `application/version` (the build number) is `<tag>.<commit count>`,
+which rises with every commit, as App Store Connect requires. Do not submit while the bundle id below is still the placeholder.
+
 The bundle id `com.danielvm.quiqui.cleanup` is a placeholder; change it in `game/export_presets.cfg`.
 
 ## What the owner still has to do

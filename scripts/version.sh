@@ -32,5 +32,7 @@ if [ "${1:-}" = "--self-test" ]; then
 	exit "$fail"
 fi
 
-tag="$(git -C "$ROOT" describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)"
+# The highest clean vX.Y.Z tag reachable from HEAD (pre-release tags such as v1.2.3-rc1 are skipped).
+tag="$(git -C "$ROOT" tag --merged HEAD --list 'v[0-9]*' --sort=-v:refname 2>/dev/null \
+	| grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)"
 normalize "$tag"

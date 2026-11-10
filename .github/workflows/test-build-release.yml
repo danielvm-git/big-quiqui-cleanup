@@ -12,7 +12,8 @@ name: Test Build Release
 #   - the project's own `scripts/preflight.sh` is the gate (lint, format, strict typing, GUT, PII, trace)
 #   - `build` is the fast ubuntu boundary-artifact job (deploy-meta.json) so the release never
 #     waits on a macOS runner; the macOS `export` job runs in parallel and attaches its bundle
-#     to the release big-release already published.
+#     to the release big-release already published. (Here the export job uploads an artifact instead and
+#     does not wait for the release, so its version is the previous tag: the owner exports from a fetched tag.)
 #   - godot versions: the export job needs export templates; the gate job does not.
 
 on:
@@ -94,7 +95,7 @@ jobs:
       - name: Offline-only guard (no network APIs in game code)
         run: |
           if grep -RInE '\b(HTTPRequest|HTTPClient|WebSocketPeer|TCPServer|StreamPeerTCP|UDPServer|PacketPeerUDP|ENetMultiplayerPeer)\b' \
-              "$PROJECT_DIR/scripts" "$PROJECT_DIR/components" "$PROJECT_DIR/scenes" 2>/dev/null; then
+              "$PROJECT_DIR/scripts" "$PROJECT_DIR/addons/quiqui_core" "$PROJECT_DIR/components" "$PROJECT_DIR/scenes" 2>/dev/null; then
             echo "FATAL: network API detected in an offline game"
             exit 1
           fi

@@ -41,3 +41,13 @@ func test_the_version_comes_from_a_tag_shape() -> void:
 	assert_eq(result[0], 0, str(result[1]))
 	var plain: Array = _run("version.sh", [])
 	assert_true(RegEx.create_from_string("^[0-9]+\\.[0-9]+\\.[0-9]+\\s*$").search(str(plain[1])) != null)
+
+
+func test_a_malformed_team_id_is_refused_before_anything_is_touched() -> void:
+	var root: String = ProjectSettings.globalize_path("res://").path_join("..")
+	var output: Array = []
+	var code: int = OS.execute(
+		"bash", ["-c", "QQ_APPLE_TEAM_ID='bad/id' bash '%s'" % root.path_join("scripts/export_ios.sh")], output, true
+	)
+	assert_eq(code, 2)
+	assert_true("".join(output).contains("10 letters or digits"))

@@ -12,13 +12,19 @@ OUT="$ROOT/build/ios"
 VERSION="$(bash "$ROOT/scripts/version.sh")"
 TEAM="${QQ_APPLE_TEAM_ID:-0000000000}"
 
+[[ "$TEAM" =~ ^[A-Z0-9]{10}$ ]] || { echo "QQ_APPLE_TEAM_ID must be 10 letters or digits"; exit 2; }
 bash "$ROOT/scripts/check_export.sh" || exit 1
+BUILD="$VERSION.$(git -C "$ROOT" rev-list --count HEAD 2>/dev/null || echo 0)"
 "$GODOT" --version >/dev/null 2>&1 || { echo "godot not found"; exit 3; }
 
 BACKUP="$(mktemp)"
 cp "$PRESETS" "$BACKUP"
-trap 'cp "$BACKUP" "$PRESETS"; rm -f "$BACKUP"' EXIT
-sed -e "s/^application\/version=.*/application\/version=\"$VERSION\"/" \
+LOG="$(mktemp)"
+restore() { cp "$BACKUP" "$PRESETS"; rm -f "$BACKUP" "$LOG"; }
+trap restore EXIT
+trap 'exit 130' INT TERM
+# application/version is the build number (App Store Connect needs a rising one), short_version the release.
+sed -e "s/^application\/version=.*/application\/version=\"$BUILD\"/" \
 	-e "s/^application\/short_version=.*/application\/short_version=\"$VERSION\"/" \
 	-e "s/^application\/app_store_team_id=.*/application\/app_store_team_id=\"$TEAM\"/" \
 	"$BACKUP" > "$PRESETS"
@@ -26,16 +32,16 @@ sed -e "s/^application\/version=.*/application\/version=\"$VERSION\"/" \
 rm -rf "$OUT"
 mkdir -p "$OUT"
 "$GODOT" --headless --path "$ROOT/game" --import > /dev/null 2>&1
-LOG="$(mktemp)"
 "$GODOT" --headless --path "$ROOT/game" --export-release iOS "$OUT/QuiQuiCleanup.ipa" > "$LOG" 2>&1
-if grep -q "export_templates\|No export template\|templates" "$LOG" && [ ! -d "$OUT/QuiQuiCleanup.xcodeproj" ]; then
+code=$?
+if grep -qiE "no export template|export templates? .*(not|missing)|templates.*not found" "$LOG"; then
 	echo "missing export templates for this Godot version (install them from the editor)"
 	exit 3
 fi
-if [ ! -d "$OUT/QuiQuiCleanup.xcodeproj" ]; then
-	echo "EXPORT FAILED"; tail -15 "$LOG"; exit 1
+if [ "$code" -ne 0 ] || [ ! -d "$OUT/QuiQuiCleanup.xcodeproj" ] || [ ! -s "$OUT/QuiQuiCleanup.pck" ]; then
+	echo "EXPORT FAILED (exit $code)"; tail -15 "$LOG"; exit 1
 fi
-if strings "$OUT/QuiQuiCleanup.pck" | grep -qE "addons/gut|res://tests/"; then
-	echo "EXPORT FAILED: tests or the test framework leaked into the game"; exit 1
+if grep -aqE "addons/gut|res://tests/|res://tools/" "$OUT/QuiQuiCleanup.pck"; then
+	echo "EXPORT FAILED: tests, tools or the test framework leaked into the game"; exit 1
 fi
-echo "EXPORTED: build/ios/QuiQuiCleanup.xcodeproj (version $VERSION)"
+echo "EXPORTED: build/ios/QuiQuiCleanup.xcodeproj (version $VERSION, build $BUILD)"
