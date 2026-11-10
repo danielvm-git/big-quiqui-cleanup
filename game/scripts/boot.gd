@@ -16,6 +16,7 @@ var beat_sec: float = 0.6
 func _ready() -> void:
 	var map: SceneDef = load("res://data/scenes/%s.tres" % MAP) as SceneDef
 	house = HouseState.from_map(map)
+	Progress.keep_unreadable(save_path)
 	progress = Progress.load_from(save_path)
 	progress.apply_to(house)
 	var sink: GameSink = GameSink.new()

@@ -1,21 +1,29 @@
 class_name Progress
 extends RefCounted
 ## What the house remembers between sessions: which rooms are clean and how many coins.
-## Schema version 1. Anything unexpected on disk gives a fresh progress, never an error.
+## Schema version 1. A bad field gives that field's default, never an error or a wrapped number.
 
 const VERSION: int = 1
+const MAX_COINS: int = 999_999_999
+const MAX_ROOMS: int = 64
 
 var clean: Array[String] = []
 var coins: int = 0
 
 
+## Fields are read one by one: a bad coin count does not throw away the clean rooms.
 static func from_dict(data: Dictionary) -> Progress:
 	var progress: Progress = Progress.new()
-	if not _valid(data):
+	if not _is_number(data.get("version")) or int(data["version"]) != VERSION:
 		return progress
-	progress.coins = int(data["coins"])
-	for room: Variant in data["clean"] as Array:
-		progress.mark_clean(str(room))
+	var coins_value: Variant = data.get("coins")
+	if _is_number(coins_value):
+		progress.add_coins(int(clampf(float(coins_value), 0.0, float(MAX_COINS))))
+	var rooms: Variant = data.get("clean")
+	if rooms is Array:
+		for room: Variant in rooms as Array:
+			if room is String:
+				progress.mark_clean(room as String)
 	return progress
 
 
@@ -23,20 +31,20 @@ static func load_from(path: String) -> Progress:
 	return from_dict(SaveFile.read(path))
 
 
-static func _valid(data: Dictionary) -> bool:
-	var version: Variant = data.get("version")
-	if not (version is int or version is float) or int(version) != VERSION:
+## A save that exists but cannot be read (corrupt, or another version) is moved to "<path>.corrupt"
+## so the first new coin does not destroy it. Returns true when it moved a file.
+static func keep_unreadable(path: String) -> bool:
+	if not FileAccess.file_exists(path):
 		return false
-	var coins_value: Variant = data.get("coins")
-	if not (coins_value is int or coins_value is float) or float(coins_value) < 0.0:
+	var data: Dictionary = SaveFile.read(path)
+	if _is_number(data.get("version")) and int(data["version"]) == VERSION:
 		return false
-	var rooms: Variant = data.get("clean")
-	if not rooms is Array:
-		return false
-	for room: Variant in rooms as Array:
-		if not room is String:
-			return false
-	return true
+	DirAccess.remove_absolute(path + ".corrupt")
+	return DirAccess.rename_absolute(path, path + ".corrupt") == OK
+
+
+static func _is_number(value: Variant) -> bool:
+	return (value is int or value is float) and not is_nan(float(value))
 
 
 func to_dict() -> Dictionary:
@@ -48,11 +56,11 @@ func save_to(path: String) -> bool:
 
 
 func add_coins(amount: int) -> void:
-	coins += maxi(amount, 0)
+	coins = clampi(coins + maxi(amount, 0), 0, MAX_COINS)
 
 
 func mark_clean(room_id: String) -> void:
-	if not clean.has(room_id):
+	if clean.size() < MAX_ROOMS and not clean.has(room_id):
 		clean.append(room_id)
 
 

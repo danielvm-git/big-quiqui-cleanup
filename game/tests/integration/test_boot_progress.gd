@@ -75,6 +75,7 @@ func test_a_corrupt_save_starts_fresh_and_the_game_runs() -> void:
 	assert_eq(boot.progress.coins, 0)
 	assert_eq(boot.house.clean_count(), 0)
 	assert_true(boot.player.template() is MapTemplate)
+	assert_true(FileAccess.file_exists(SAVE + ".corrupt"), "the unreadable save is kept aside")
 
 
 func test_a_saved_room_the_house_no_longer_has_is_ignored() -> void:

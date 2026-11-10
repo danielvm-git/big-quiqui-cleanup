@@ -3,16 +3,20 @@ extends GutTest
 ## SaveFile writes JSON atomically and never throws a bad file at the game.
 
 const PATH: String = "user://test_save_file.json"
+const SUFFIXES: Array[String] = ["", ".tmp", ".bak"]
 
 
 func before_each() -> void:
-	_remove(PATH)
-	_remove(PATH + ".tmp")
+	_clean()
 
 
 func after_all() -> void:
-	_remove(PATH)
-	_remove(PATH + ".tmp")
+	_clean()
+
+
+func _clean() -> void:
+	for suffix: String in SUFFIXES:
+		_remove(PATH + suffix)
 
 
 func _remove(path: String) -> void:
@@ -70,3 +74,35 @@ func test_a_leftover_temporary_file_does_not_hurt() -> void:
 
 func test_an_unwritable_path_returns_false() -> void:
 	assert_false(SaveFile.write("user://no_such_dir/x.json", {"a": 1}))
+
+
+func test_a_successful_write_leaves_no_backup() -> void:
+	SaveFile.write(PATH, {"coins": 1})
+	SaveFile.write(PATH, {"coins": 2})
+	assert_false(FileAccess.file_exists(PATH + ".bak"))
+
+
+func test_a_lost_main_file_is_recovered_from_the_backup() -> void:
+	SaveFile.write(PATH, {"coins": 1})
+	DirAccess.rename_absolute(PATH, PATH + ".bak")
+	assert_eq(int(SaveFile.read(PATH)["coins"]), 1)
+
+
+func test_a_corrupt_main_file_is_recovered_from_the_backup() -> void:
+	SaveFile.write(PATH, {"coins": 1})
+	DirAccess.rename_absolute(PATH, PATH + ".bak")
+	_write_raw("{broken")
+	assert_eq(int(SaveFile.read(PATH)["coins"]), 1)
+
+
+func test_a_failed_write_keeps_the_old_save() -> void:
+	SaveFile.write(PATH, {"coins": 1})
+	DirAccess.make_dir_absolute(PATH + ".tmp")
+	assert_false(SaveFile.write(PATH, {"coins": 9}))
+	DirAccess.remove_absolute(PATH + ".tmp")
+	assert_eq(int(SaveFile.read(PATH)["coins"]), 1)
+
+
+func test_a_huge_file_is_not_read() -> void:
+	_write_raw('{"pad": "%s"}' % "x".repeat(SaveFile.MAX_BYTES))
+	assert_eq(SaveFile.read(PATH), {})
