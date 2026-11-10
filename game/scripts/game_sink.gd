@@ -5,6 +5,8 @@ extends ReactionSink
 
 signal coins_added(amount: int)
 
+## One channel for the voice: a new line replaces the one still playing.
+const VOICE_NODE: String = "Voice"
 const THROTTLE_MS: int = 140
 
 var quiqui: TextureRect = null
@@ -28,7 +30,17 @@ func play_sfx(value: String) -> void:
 
 
 func play_voice(value: String) -> void:
-	_play(Assets.sound("voice/" + value))
+	var stream: AudioStream = Assets.voice(value)
+	var parent: Node = audio_host if audio_host != null else host
+	if stream == null or parent == null:
+		return
+	var voice: AudioStreamPlayer = parent.get_node_or_null(VOICE_NODE) as AudioStreamPlayer
+	if voice == null:
+		voice = AudioStreamPlayer.new()
+		voice.name = VOICE_NODE
+		parent.add_child(voice)
+	voice.stream = stream
+	voice.play()
 
 
 func play_fx(value: String) -> void:

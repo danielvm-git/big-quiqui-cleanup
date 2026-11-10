@@ -21,6 +21,7 @@ func _init() -> void:
 	_boot.save_path = SAVE
 	DirAccess.remove_absolute(SAVE)
 	root.add_child(_boot)
+	await _title()
 	await _shot("map")
 	for room: String in ROOMS:
 		await _room(room)
@@ -29,15 +30,43 @@ func _init() -> void:
 	quit(0)
 
 
+## The title, then the parent area over it, then play.
+func _title() -> void:
+	await _shot("title")
+	var title: TitleView = _boot.player.stage.get_child(0) as TitleView
+	title.panel.open()
+	await _shot("title_parent")
+	title.panel.close()
+	(_boot.player.template() as TitleTemplate).play()
+	await process_frame
+	await process_frame
+
+
 func _room(room: String) -> void:
 	(_boot.player.template() as MapTemplate).choose_room(room)
 	await _shot(room + "_start")
 	await _half(room)
+	await _reveal_shot(room)
 	_finish()
 	await _shot(room + "_outro")
 	_boot.player.outro_button.pressed.emit()
 	await process_frame
 	await _reward(room == ROOMS[0])
+
+
+## The last step is the reveal: one shot untouched, one with a band rubbed away.
+func _reveal_shot(room: String) -> void:
+	var guard: int = 0
+	while not _boot.player.template() is RevealTemplate and guard < 10:
+		StepSolver.solve(_boot.player.template(), _boot.player.scene_player.current_step().params)
+		guard += 1
+	await _shot(room + "_reveal_start")
+	var erase: EraseTemplate = _boot.player.template() as EraseTemplate
+	for y: int in range(300, 700, 100):
+		erase.rub_begin(Vector2(200, y))
+		erase.rub_to(Vector2(1100, y))
+	erase.rub_end()
+	await _shot(room + "_reveal_half")
 
 
 ## The reward scene after a room. Only the first room gets screenshots; the rest just pass through.

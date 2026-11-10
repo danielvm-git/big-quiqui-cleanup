@@ -50,10 +50,35 @@ params = {
 }
 on_hit = Array[ExtResource("3_xodnj")]([SubResource("Resource_8bkak"), SubResource("Resource_04dft")])
 
+[sub_resource type="Resource" id="Resource_tnaxq"]
+script = ExtResource("3_xodnj")
+kind = "sfx"
+value = "bubble"
+
+[sub_resource type="Resource" id="Resource_ei4ym"]
+script = ExtResource("3_xodnj")
+kind = "pose"
+value = "laugh"
+
+[sub_resource type="Resource" id="Resource_fqsn4"]
+script = ExtResource("2_6487e")
+template = "t34_rub_reveal"
+params = {
+"before": "before/bathroom",
+"cell": 40.0,
+"layer_rect": Rect2(0, 0, 1920, 1080),
+"levels": 1,
+"radius": 100.0,
+"threshold": 0.7,
+"tool": "sponge"
+}
+on_hit = Array[ExtResource("3_xodnj")]([SubResource("Resource_tnaxq"), SubResource("Resource_ei4ym")])
+
 [resource]
 script = ExtResource("1_ec61y")
 id = "bathroom"
 background = "backgrounds/bathroom"
 music = "music/main_theme"
-steps = Array[ExtResource("2_6487e")]([SubResource("Resource_ub8p2"), SubResource("Resource_50ksh")])
+intro_voice = "vo.bathroom.intro"
+steps = Array[ExtResource("2_6487e")]([SubResource("Resource_ub8p2"), SubResource("Resource_50ksh"), SubResource("Resource_fqsn4")])
 next = "reward"

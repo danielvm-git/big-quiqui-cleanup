@@ -111,6 +111,7 @@ func test_the_whole_loop_goes_room_reward_map() -> void:
 	add_child_autofree(holder)
 	var boot: Boot = (load("res://scenes/boot.tscn") as PackedScene).instantiate() as Boot
 	boot.beat_sec = 0.0
+	boot.start_scene = Boot.MAP
 	boot.save_path = SAVE
 	boot.set_anchors_preset(Control.PRESET_FULL_RECT)
 	holder.add_child(boot)

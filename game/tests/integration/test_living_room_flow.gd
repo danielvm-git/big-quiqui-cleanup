@@ -38,6 +38,9 @@ func test_cleaning_the_room_reaches_the_outro() -> void:
 	_wipe(player.template() as EraseTemplate)
 	assert_true(player.template() is DragSnapTemplate)
 	_tidy(player.template() as DragSnapTemplate)
+	assert_true(player.template() is RevealTemplate, "the room ends with the reveal")
+	assert_eq(player.scene_player.state(), ScenePlayer.STEP)
+	StepSolver.solve(player.template(), player.scene_player.current_step().params)
 	assert_eq(player.scene_player.state(), ScenePlayer.OUTRO)
 
 

@@ -1,0 +1,32 @@
+epic: e04
+stories:
+  - id: e04s01
+    title: Voice by key and locale
+    tasks:
+      - id: e04s01-t1
+        what: Assets.voice finds audio/voice/<locale>/<key>.ogg; the sink plays it; a missing file is silent with a warning; scenes play intro_voice; check_voice.sh lists missing keys
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_voice -gexit
+  - id: e04s02
+    title: Parent gate
+    tasks:
+      - id: e04s02-t1
+        what: ParentGate is an Fsm (IDLE, HOLDING, OPEN); only an unbroken hold of 2.5 s opens it
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_parent_gate -gexit
+  - id: e04s03
+    title: t34_rub_reveal
+    tasks:
+      - id: e04s03-t1
+        what: RevealTemplate (rubs a before layer away) and RevealView; each room ends with a reveal; before art generated
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t34_reveal -gexit
+  - id: e04s04
+    title: t0_title and parent area
+    tasks:
+      - id: e04s04-t1
+        what: TitleTemplate, TitleView with play button, lock, parent panel; Progress.reset; Player wires reset
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_title -gexit
+  - id: e04s05
+    title: Boot opens on the title
+    tasks:
+      - id: e04s05-t1
+        what: title scene as data, show_outro flag, Boot starts at the title, whole flow title to map, screenshots
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_title_flow -gexit

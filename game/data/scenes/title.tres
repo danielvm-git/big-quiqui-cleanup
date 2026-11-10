@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="SceneDef" format=3]
+
+[ext_resource type="Script" path="res://addons/quiqui_core/data/scene_def.gd" id="1_fpapf"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/step_def.gd" id="2_uckyu"]
+[ext_resource type="Script" path="res://addons/quiqui_core/data/reaction.gd" id="3_bo03v"]
+
+[sub_resource type="Resource" id="Resource_gdrem"]
+script = ExtResource("3_bo03v")
+kind = "sfx"
+value = "tap"
+
+[sub_resource type="Resource" id="Resource_y0f1c"]
+script = ExtResource("3_bo03v")
+kind = "pose"
+value = "jump"
+
+[sub_resource type="Resource" id="Resource_k5fn0"]
+script = ExtResource("2_uckyu")
+template = "t0_title"
+on_hit = Array[ExtResource("3_bo03v")]([SubResource("Resource_gdrem"), SubResource("Resource_y0f1c")])
+
+[resource]
+script = ExtResource("1_fpapf")
+id = "title"
+background = "backgrounds/house"
+music = "music/main_theme"
+quiqui_pose = "wave"
+steps = Array[ExtResource("2_uckyu")]([SubResource("Resource_k5fn0")])
+next = "house_map"
+show_outro = false

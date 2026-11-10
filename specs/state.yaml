@@ -1,6 +1,6 @@
-active_epic: e03
+active_epic: e04
 active_story: none
-branch: feat/e03-reward-save
+branch: feat/e04-title-polish
 decisions:
   - gate: "EPIC mapping"
     decision: "e01 = slice S1 (done, merged, v0.1.0). e02 = slice S2, requested by the user in chat"
@@ -20,3 +20,7 @@ decisions:
     decision: "e03 = slice S3, requested in chat (proceed). A star carries one coin, no separate star total. SaveFile in the core takes its path as an argument. Bad save gives fresh progress"
   - gate: "e03 request-review / respond-review"
     decision: "Fixed: coins capped (no int wrap), fields read one by one, clean list capped, SaveFile never deletes the old file before the new one is whole and recovers from .bak, size cap, unreadable save moved to .corrupt, distinct test save path. Accepted: replaying a room gives its coins again (no shop, charter); revisit if coins become spendable. Deferred: Boot flow test collects via the template, the tap path is covered in test_reward_view"
+  - gate: "e04 scope"
+    decision: "e04 = slice S4, requested in chat (proceed). Recorded voice and final art need people, so they stay out; voice plumbing and the title, gate, reveal are in. Parent gate = 2.5 s hold. Missing voice is a NOTE in check_voice.sh until recordings exist (deviates from ADR-003 gate failure, noted in the capsule)"
+  - gate: "e04 request-review / respond-review"
+    decision: "Fixed: parent gate hold now needs the same finger on the lock (drag-off, release anywhere, focus loss end it; a second finger is ignored); ring shows only from 35 percent; reset closes the panel and disarms after 5 s; one voice channel; reveal layer sized to the whole screen with run-length drawing; StepSolver uses the template rect and cannot loop forever; test hygiene (supported list restored, tap test reaches the hold time); check_voice regex and locale folder. Accepted risk: a 2.5 s hold is a weak gate against a determined child, no store listing exists yet, revisit with the S5 store build. Deferred: reveal hint does not show where to rub; Assets.locale is fixed to pt_BR until a second language exists"

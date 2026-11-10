@@ -88,7 +88,19 @@ func test_the_outro_button_is_centered_on_the_stage() -> void:
 	assert_eq(center, Vector2(960, 540))
 
 
+var _supported: Array[String] = []
+
+
+func before_each() -> void:
+	_supported = ViewFactory.supported.duplicate()
+
+
+func after_each() -> void:
+	ViewFactory.supported = _supported.duplicate()
+
+
 func test_a_scene_with_an_unsupported_template_reports_failed() -> void:
+	ViewFactory.supported.erase("t0_title")
 	var def: SceneDef = SceneDef.new()
 	def.id = "title"
 	def.background = "backgrounds/living_room"
@@ -99,6 +111,7 @@ func test_a_scene_with_an_unsupported_template_reports_failed() -> void:
 	watch_signals(player)
 	add_child_autofree(player)
 	await get_tree().process_frame
+	ViewFactory.supported.append("t0_title")
 	assert_signal_emitted(player, "failed")
 	assert_push_error("unsupported")
 

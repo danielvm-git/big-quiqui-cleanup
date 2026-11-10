@@ -19,6 +19,7 @@ func _boot(size: Vector2i = Vector2i(1920, 1080)) -> Boot:
 	add_child_autofree(holder)
 	var boot: Boot = (load("res://scenes/boot.tscn") as PackedScene).instantiate() as Boot
 	boot.beat_sec = 0.0
+	boot.start_scene = Boot.MAP
 	boot.save_path = TestReset.TEST_SAVE_PATH
 	boot.set_anchors_preset(Control.PRESET_FULL_RECT)
 	holder.add_child(boot)

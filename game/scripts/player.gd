@@ -11,6 +11,7 @@ const SCENE_DIR: String = "res://data/scenes/"
 const OUTRO_POSE: String = "sparkle"
 const STAGE_SIZE: Vector2 = Vector2(1920, 1080)
 const HIT_GROUP: String = "hit_target"
+const HUBS: Array[String] = ["t25_map", "t0_title"]
 
 ## A short celebration after a step is complete. It never ends a step, which is already done.
 var beat_sec: float = 0.6
@@ -80,6 +81,7 @@ func play_again() -> void:
 
 func _begin() -> void:
 	_sink.play_pose(scene_player.scene.quiqui_pose)
+	_sink.play_voice(scene_player.scene.intro_voice)
 	scene_player.advance()
 	scene_player.advance()
 
@@ -134,14 +136,19 @@ func _is_map(def: SceneDef) -> bool:
 	return def.steps.size() == 1 and def.steps[0].template == "t25_map"
 
 
+## The map and the title are hubs: one step, no meter, no Home button.
+func _is_hub(def: SceneDef) -> bool:
+	return def.steps.size() == 1 and HUBS.has(def.steps[0].template)
+
+
 func _build_meter(def: SceneDef) -> void:
 	meter.configure(def.steps.size())
 	meter.position = Vector2((STAGE_SIZE.x - meter.size.x) * 0.5, 40)
 	stage.add_child(meter)
-	var on_map: bool = _is_map(def)
-	meter.visible = not on_map
-	home_button.visible = not on_map
-	_quiqui.visible = not on_map
+	var hub: bool = _is_hub(def)
+	meter.visible = not hub
+	home_button.visible = not hub
+	_quiqui.visible = not _is_map(def)
 
 
 func _center_stage() -> void:
@@ -179,6 +186,8 @@ func _on_step_started(index: int, step: StepDef) -> void:
 	template_now.completed.connect(_on_step_completed)
 	if template_now is MapTemplate:
 		(template_now as MapTemplate).room_chosen.connect(scene_player.leave_to)
+	if template_now is TitleTemplate:
+		(template_now as TitleTemplate).reset_requested.connect(reset_progress)
 	_view.connect("touched", hint.notify_input)
 
 
@@ -226,6 +235,9 @@ func _on_transitioned(_from: String, to_state: String) -> void:
 func _show_outro() -> void:
 	_clear_view()
 	hint.stop()
+	if not scene_player.scene.show_outro:
+		scene_player.advance.call_deferred()
+		return
 	meter.fill(scene_player.scene.steps.size())
 	if house != null and house.mark_clean(scene_id) and progress != null:
 		progress.mark_clean(scene_id)
@@ -238,6 +250,16 @@ func _show_outro() -> void:
 		outro_button.size = Vector2(240, 240)
 		stage.add_child(outro_button)
 	outro_button.visible = true
+
+
+## The parent area asked for a fresh start: no clean rooms, no coins.
+func reset_progress() -> void:
+	Log.info("progress_reset", {})
+	if house != null:
+		house.reset()
+	if progress != null:
+		progress.reset()
+		_save()
 
 
 func _on_coins(amount: int) -> void:

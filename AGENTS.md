@@ -30,6 +30,7 @@ context. Release builds print nothing. Never log a name, a path or typed text.
 | View the log lines | `godot --path game 2>&1 \| grep '"message"'` |
 | All gates | `bash scripts/preflight.sh` |
 | Setup again (safe to repeat) | `bash scripts/setup.sh` |
+| Voice lines still missing | `bash scripts/check_voice.sh` (`--strict` fails) |
 
 ## Rules
 
