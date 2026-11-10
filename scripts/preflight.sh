@@ -68,6 +68,11 @@ done
 stage "L3b voice lines"
 bash scripts/check_voice.sh
 
+stage "L3c export hygiene"
+run "export preset is clean" bash scripts/check_export.sh
+run "export check self-test" bash scripts/check_export.sh --self-test
+run "version script self-test" bash scripts/version.sh --self-test
+
 stage "L4 traceability"
 run "trace stories (strict)" bash scripts/trace_stories.sh --strict
 

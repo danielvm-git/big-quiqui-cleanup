@@ -14,6 +14,7 @@ This game also builds the shared core of the QuiQui line (`game/addons/quiqui_co
 | All gates | `bash scripts/preflight.sh` |
 | Fast gates (pre-commit) | `bash scripts/preflight.sh --fast` |
 | Run | `godot --path game` |
+| iOS Xcode project (unsigned, see `specs/RELEASING.md`) | `bash scripts/export_ios.sh` |
 | Tests only | `godot --headless --path game -s addons/gut/gut_cmdln.gd -gexit` |
 
 Godot 4.7, GDScript, GUT 9.6 (vendored, never edit `game/addons/gut`), gdtoolkit for lint and format.

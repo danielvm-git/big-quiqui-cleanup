@@ -1,0 +1,29 @@
+epic: e05
+stories:
+  - id: e05s01
+    title: Device project settings
+    tasks:
+      - id: e05s01-t1
+        what: Landscape orientation, project icon (opaque square), version 0.0.0, no network features; checked from ProjectSettings
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_project_settings -gexit
+  - id: e05s02
+    title: iOS export preset and script
+    tasks:
+      - id: e05s02-t1
+        what: export_presets.cfg for iOS without signing data; scripts/check_export.sh with a self-test that fails on planted violations
+        verify: bash scripts/check_export.sh --self-test
+      - id: e05s02-t2
+        what: scripts/export_ios.sh exports an Xcode project to build/ios with the tag version
+        verify: bash scripts/export_ios.sh
+  - id: e05s03
+    title: Version ladder
+    tasks:
+      - id: e05s03-t1
+        what: scripts/version.sh prints the current version from the latest tag; RELEASING.md documents the ladder
+        verify: bash scripts/version.sh --self-test
+  - id: e05s04
+    title: CI export job
+    tasks:
+      - id: e05s04-t1
+        what: macOS export job in the workflow; actionlint clean; artifact upload
+        verify: actionlint .github/workflows/test-build-release.yml

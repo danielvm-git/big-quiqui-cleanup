@@ -3,7 +3,7 @@ name: Test Build Release
 # with the workflow_call inputs inlined (project_dir=game, godot 4.7.0, no export preset,
 # big-release). A copy, not `uses:`, because a cross-repo call from a private repository
 # fails at startup (same finding as big-quiqui-v2, ADR-007 there). Re-sync when upstream moves.
-# Do not rename: deploy listens for "Test Build Release".
+# Added to the copy: an `export` job (macOS, unsigned iOS Xcode project). Do not rename: deploy listens for "Test Build Release".
 # version: 4.4.0 — see workflow-templates/CHANGELOG.md
 # Reusable workflow: call with `uses: danielvm-git/.github/.github/workflows/test-build-release-godot.yml@main`
 # Or copy to .github/workflows/test-build-release.yml (Godot 4.x — no deploy template yet: iOS ships via GitHub Release)
@@ -124,6 +124,37 @@ jobs:
           name: deploy-meta
           path: deploy-meta.json
           retention-days: 30
+          if-no-files-found: error
+
+  export:
+    # Proves on every run that the iOS Xcode project can be exported (unsigned). macOS runners are free for a
+    # public repository. The project is uploaded only from main: it is large and only useful from a release.
+    needs: [test]
+    runs-on: macos-14
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - uses: chickensoft-games/setup-godot@ac93246ea68518a384c1c280a496e5989341f2f6  # v2.4.0
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          include-templates: true
+
+      - name: Export the iOS Xcode project (unsigned)
+        run: bash scripts/export_ios.sh
+
+      - name: Upload the Xcode project
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: ios-xcode-project
+          path: build/ios
+          retention-days: 7
           if-no-files-found: error
 
   release:
