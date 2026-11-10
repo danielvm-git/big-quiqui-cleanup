@@ -24,7 +24,7 @@ static func reset_all() -> void:
 
 
 static func delete_test_save() -> void:
-	for suffix: String in ["", ".bak", ".tmp"]:
+	for suffix: String in ["", ".bak", ".tmp", ".corrupt"]:
 		if FileAccess.file_exists(TEST_SAVE_PATH + suffix):
 			DirAccess.remove_absolute(TEST_SAVE_PATH + suffix)
 

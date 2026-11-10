@@ -1,9 +1,12 @@
 extends SceneTree
 ## In-engine screenshots of the whole house (the suite cannot see composition).
 ## godot --path game -s res://tools/capture_scene.gd -- <out_prefix> [width height]
-## Writes <prefix>_map.png, then <prefix>_<room>_start.png and _outro.png per room, then _map_clean.png.
+## Writes <prefix>_map.png, then <prefix>_<room>_start.png, _half.png and _outro.png per room, the reward
+## (_reward_start, _reward_half, _reward_done after the first room), then _map_clean.png.
+## It saves to a throwaway file, never to the real save.
 
 const ROOMS: Array[String] = ["living_room", "kitchen", "bathroom", "bedroom", "garden"]
+const SAVE: String = "user://capture_progress.json"
 
 var _boot: Boot = null
 var _prefix: String = "/tmp/qq_capture/house"
@@ -15,18 +18,39 @@ func _init() -> void:
 		_prefix = args[0]
 	_boot = (load("res://scenes/boot.tscn") as PackedScene).instantiate() as Boot
 	_boot.beat_sec = 0.0
+	_boot.save_path = SAVE
+	DirAccess.remove_absolute(SAVE)
 	root.add_child(_boot)
 	await _shot("map")
 	for room: String in ROOMS:
-		(_boot.player.template() as MapTemplate).choose_room(room)
-		await _shot(room + "_start")
-		await _half(room)
-		_finish()
-		await _shot(room + "_outro")
-		_boot.player.outro_button.pressed.emit()
-		await process_frame
+		await _room(room)
 	await _shot("map_clean")
+	DirAccess.remove_absolute(SAVE)
 	quit(0)
+
+
+func _room(room: String) -> void:
+	(_boot.player.template() as MapTemplate).choose_room(room)
+	await _shot(room + "_start")
+	await _half(room)
+	_finish()
+	await _shot(room + "_outro")
+	_boot.player.outro_button.pressed.emit()
+	await process_frame
+	await _reward(room == ROOMS[0])
+
+
+## The reward scene after a room. Only the first room gets screenshots; the rest just pass through.
+func _reward(shoot: bool) -> void:
+	if shoot:
+		await _shot("reward_start")
+		_tap_star("star_0")
+		await _shot("reward_half")
+	_finish()
+	if shoot:
+		await _shot("reward_done")
+	_boot.player.outro_button.pressed.emit()
+	await process_frame
 
 
 func _shot(name: String) -> void:
@@ -54,6 +78,16 @@ func _half(room: String) -> void:
 	elif template is TouchEachTemplate:
 		(template as TouchEachTemplate).touch((template as TouchEachTemplate).remaining()[0])
 	await _shot(room + "_half")
+
+
+## A real touch on the star's node, so the view animates it (the template alone would not).
+func _tap_star(id: String) -> void:
+	for node: Node in _boot.get_tree().get_nodes_in_group("hit_target"):
+		if node.name == id:
+			var touch: InputEventScreenTouch = InputEventScreenTouch.new()
+			touch.pressed = true
+			touch.position = Vector2(10, 10)
+			(node as Control).gui_input.emit(touch)
 
 
 func _finish() -> void:

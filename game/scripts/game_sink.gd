@@ -3,6 +3,8 @@ extends ReactionSink
 ## The real answer to a reaction: QuiQui's pose, a sound, a sparkle. Same-frame, throttled
 ## so a rub that hits every frame does not stack sounds.
 
+signal coins_added(amount: int)
+
 const THROTTLE_MS: int = 140
 
 var quiqui: TextureRect = null
@@ -62,6 +64,7 @@ func play_music(key: String) -> void:
 
 func add_coins(amount: int) -> void:
 	coins += amount
+	coins_added.emit(amount)
 
 
 func _throttled(key: String) -> bool:

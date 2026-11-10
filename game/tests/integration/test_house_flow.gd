@@ -5,12 +5,21 @@ extends GutTest
 const ROOMS: Array[String] = ["living_room", "kitchen", "bathroom", "bedroom", "garden"]
 
 
+func before_each() -> void:
+	TestReset.delete_test_save()
+
+
+func after_all() -> void:
+	TestReset.delete_test_save()
+
+
 func _boot(size: Vector2i = Vector2i(1920, 1080)) -> Boot:
 	var holder: Control = Control.new()
 	holder.size = Vector2(size)
 	add_child_autofree(holder)
 	var boot: Boot = (load("res://scenes/boot.tscn") as PackedScene).instantiate() as Boot
 	boot.beat_sec = 0.0
+	boot.save_path = TestReset.TEST_SAVE_PATH
 	boot.set_anchors_preset(Control.PRESET_FULL_RECT)
 	holder.add_child(boot)
 	await get_tree().process_frame
@@ -23,6 +32,16 @@ func _solve_room(player: Player) -> void:
 		var step: StepDef = player.scene_player.current_step()
 		StepSolver.solve(player.template(), step.params)
 		guard += 1
+
+
+## Presses the outro button, collects the reward, and presses the reward's own outro: back at the map.
+func _leave_room(boot: Boot) -> void:
+	boot.player.outro_button.pressed.emit()
+	await get_tree().process_frame
+	assert_eq(boot.player.scene_id, "reward")
+	_solve_room(boot.player)
+	boot.player.outro_button.pressed.emit()
+	await get_tree().process_frame
 
 
 func test_boot_opens_the_map() -> void:
@@ -50,8 +69,7 @@ func test_every_room_can_be_cleaned_and_the_map_shows_it() -> void:
 		assert_eq(boot.player.scene_id, room)
 		_solve_room(boot.player)
 		assert_eq(boot.player.scene_player.state(), ScenePlayer.OUTRO, room)
-		boot.player.outro_button.pressed.emit()
-		await get_tree().process_frame
+		await _leave_room(boot)
 		assert_eq(boot.player.scene_id, "house_map")
 		assert_true((boot.player.template() as MapTemplate).is_clean(room), room)
 	assert_true(boot.house.all_clean())
@@ -62,8 +80,7 @@ func test_a_clean_room_can_be_played_again_from_the_map() -> void:
 	(boot.player.template() as MapTemplate).choose_room("garden")
 	await get_tree().process_frame
 	_solve_room(boot.player)
-	boot.player.outro_button.pressed.emit()
-	await get_tree().process_frame
+	await _leave_room(boot)
 	(boot.player.template() as MapTemplate).choose_room("garden")
 	await get_tree().process_frame
 	assert_eq(boot.player.scene_player.state(), ScenePlayer.STEP)
@@ -83,5 +100,4 @@ func test_every_scene_passes_the_oracle_on_every_size_at_start_and_at_the_outro(
 				continue
 			_solve_room(boot.player)
 			assert_eq(GeometryOracle.audit(holder, size), [] as Array[String], "%s %s outro" % [room, size])
-			boot.player.outro_button.pressed.emit()
-			await get_tree().process_frame
+			await _leave_room(boot)

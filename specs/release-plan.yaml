@@ -10,3 +10,8 @@ epics:
     title: The house
     wsjf: 2
     capsule: specs/epics/e02-the-house
+  - id: e03
+    slice: S3
+    title: Reward and save
+    wsjf: 3
+    capsule: specs/epics/e03-reward-save

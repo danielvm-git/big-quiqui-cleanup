@@ -1,0 +1,38 @@
+epic: e03
+stories:
+  - id: e03s01
+    title: SaveFile
+    tasks:
+      - id: e03s01-t1
+        what: SaveFile writes JSON atomically (tmp then rename) and reads it back; missing or corrupt gives an empty dictionary
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_save_file -gexit
+  - id: e03s02
+    title: Progress
+    tasks:
+      - id: e03s02-t1
+        what: Progress holds clean rooms and coins, round-trips through SaveFile, rejects a wrong version or wrong types
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_progress -gexit
+  - id: e03s03
+    title: t32_reward
+    tasks:
+      - id: e03s03-t1
+        what: RewardTemplate collects each star once, done when all are collected
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_t32_reward -gexit
+      - id: e03s03-t2
+        what: RewardView shows the stars, routes taps, placeholder star art
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_reward_view -gexit
+  - id: e03s04
+    title: Reward in the flow
+    tasks:
+      - id: e03s04-t1
+        what: reward scene as data; rooms lead to it; the coins reaction reaches Progress; the reward leads to the map
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_reward_flow -gexit
+  - id: e03s05
+    title: Boot keeps progress
+    tasks:
+      - id: e03s05-t1
+        what: Boot loads Progress, seeds the house, saves when a room is cleaned or a coin is earned; corrupt save starts fresh
+        verify: godot --headless --path game -s addons/gut/gut_cmdln.gd -gselect=test_boot_progress -gexit
+      - id: e03s05-t2
+        what: In-engine screenshot of the reward
+        verify: bash scripts/capture_scene.sh reward

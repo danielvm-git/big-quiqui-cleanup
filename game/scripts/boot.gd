@@ -6,6 +6,8 @@ extends Control
 const MAP: String = "house_map"
 
 var house: HouseState = null
+var progress: Progress = null
+var save_path: String = "user://progress.json"
 var player: Player = null
 ## Passed to every player. Tests set it to zero.
 var beat_sec: float = 0.6
@@ -14,6 +16,9 @@ var beat_sec: float = 0.6
 func _ready() -> void:
 	var map: SceneDef = load("res://data/scenes/%s.tres" % MAP) as SceneDef
 	house = HouseState.from_map(map)
+	Progress.keep_unreadable(save_path)
+	progress = Progress.load_from(save_path)
+	progress.apply_to(house)
 	var sink: GameSink = GameSink.new()
 	sink.host = self
 	sink.play_music(map.music)
@@ -24,6 +29,8 @@ func _open(scene_id: String) -> void:
 	player = (load("res://scenes/player.tscn") as PackedScene).instantiate() as Player
 	player.scene_id = scene_id
 	player.house = house
+	player.progress = progress
+	player.save_path = save_path
 	player.beat_sec = beat_sec
 	player.left.connect(_on_left.bind(player))
 	player.failed.connect(_on_failed.bind(player))
