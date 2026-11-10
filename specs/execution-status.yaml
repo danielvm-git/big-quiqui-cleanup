@@ -1,5 +1,5 @@
-epic: e04
-branch: feat/e04-title-polish
+epic: e05
+branch: feat/e05-build-release
 stories:
   e01s01: done
   e01s02: done
@@ -25,3 +25,7 @@ stories:
   e04s03: done
   e04s04: done
   e04s05: done
+  e05s01: done
+  e05s02: done
+  e05s03: done
+  e05s04: done

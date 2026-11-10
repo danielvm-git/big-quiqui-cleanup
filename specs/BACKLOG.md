@@ -9,7 +9,7 @@ Slices, in order. Each one ends with something that runs. Update the status as s
 | S2 | The house | `t25_map` hub, `t21_touch_each`, the other four rooms as data, two dirt levels, the room meter | done |
 | S3 | Reward and save | `t32_reward`, atomic save, stars and coins | done |
 | S4 | Title and polish | `t0_title` with the parent gate, `t34_rub_reveal` for before and after, recorded voice, final art | code done (e04); recorded voice and final art still need people |
-| S5 | Build and release | CI on the central workflow, iOS export, version ladder | |
+| S5 | Build and release | CI on the central workflow, iOS export, version ladder | code done (e05); signing and App Store upload need the owner |
 
 ## Planned ports from big-quiqui-v2
 

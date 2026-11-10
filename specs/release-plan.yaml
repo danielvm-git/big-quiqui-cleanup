@@ -20,3 +20,8 @@ epics:
     title: Title and polish
     wsjf: 4
     capsule: specs/epics/e04-title-polish
+  - id: e05
+    slice: S5
+    title: Build and release
+    wsjf: 5
+    capsule: specs/epics/e05-build-release
